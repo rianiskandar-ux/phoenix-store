@@ -143,8 +143,15 @@ function GetStartedInner() {
             premium: { monthly: 78, yearly: 79 },
         };
         const productId = plan === "free" ? PRODUCT_IDS.free : PRODUCT_IDS[plan]?.[payment];
-        const base = process.env.NEXT_PUBLIC_WC_URL.replace(/\/$/, "");
-        router.push(`${base}/checkout/?add-to-cart=${productId}`);
+        const base = (process.env.NEXT_PUBLIC_WC_URL || "").replace(/\/$/, "");
+
+        if (!base || !productId) {
+            alert("Configuration error. Please contact support.");
+            setLoading(false);
+            return;
+        }
+
+        window.location.href = `${base}/checkout/?add-to-cart=${productId}`;
     }
 
     const inputClass = "w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-phoenix-text bg-white focus:outline-none focus:ring-2 focus:ring-phoenix-orange/20 focus:border-phoenix-orange transition-all placeholder:text-gray-400";
