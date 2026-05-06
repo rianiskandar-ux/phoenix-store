@@ -1,0 +1,13 @@
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 24321 / 0000000000005f010000000000000000
+Class        : WBSSaaS\Logger
+User         : aufa.atha-8960 / ID:62
+Session      : No Session Token
+Referer      : No referer
+URI          : /wp-admin/admin-ajax.php?action=as_async_request_queue_runner&nonce=1fc0688664
+User Agent   : WordPress/6.9; https://staging.phoenix-whistleblowing.com
+IP / Hostname: 127.0.0.1 / localhost
+13-04-2026 09:16:31.690635 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #24321
+13-04-2026 09:16:31.690663 [INFO] wbssaas.wcs.addon.payment.complete:333 : Start hook Addon Payment complete
+13-04-2026 09:16:31.690691 [WARNING] wbssaas.wcs.addon.payment.complete:445 : This is not a payment for an Addon.
+13-04-2026 09:16:31.690712 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #24321

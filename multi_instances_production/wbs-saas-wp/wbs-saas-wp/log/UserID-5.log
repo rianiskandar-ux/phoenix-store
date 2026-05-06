@@ -1,0 +1,448 @@
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 15676 / 0000000000003d3c0000000000000000
+Class        : WBSSaaS\PhoenixAPI
+User         : sheev.palpatine / ID:5
+Session      : KbB4kkxV3b1v0NIr5AFmhCL78jjFEx8dRMXpGa5FW9s
+Referer      : https://staging.phoenix-whistleblowing.com/checkout/order-received/31255/?key=wc_order_burUhuQ4ceIB9
+URI          : /my-account/workspaces/?swcfpc=1
+User Agent   : Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0
+IP / Hostname: 10.30.112.98 / 10.30.112.98
+10-04-2026 09:55:26.927936 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #15676
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 21064 / 00000000000052480000000000000000
+Class        : WBSSaaS\PhoenixAPI
+User         : sheev.palpatine / ID:5
+Session      : KbB4kkxV3b1v0NIr5AFmhCL78jjFEx8dRMXpGa5FW9s
+Referer      : https://staging.phoenix-whistleblowing.com/checkout/order-received/31255/?key=wc_order_burUhuQ4ceIB9
+URI          : /my-account/workspaces/?swcfpc=1
+User Agent   : Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0
+IP / Hostname: 10.30.112.98 / 10.30.112.98
+10-04-2026 09:55:27.581872 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #21064
+10-04-2026 09:55:27.581932 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #15676
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 20998 / 00000000000052060000000000000000
+Class        : WBSSaaS\PhoenixAPI
+User         : sheev.palpatine / ID:5
+Session      : KbB4kkxV3b1v0NIr5AFmhCL78jjFEx8dRMXpGa5FW9s
+Referer      : https://staging.phoenix-whistleblowing.com/checkout/order-received/31255/?key=wc_order_burUhuQ4ceIB9
+URI          : /my-account/workspaces/?swcfpc=1
+User Agent   : Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0
+IP / Hostname: 10.30.112.98 / 10.30.112.98
+10-04-2026 09:55:27.806208 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #20998
+10-04-2026 09:55:27.806249 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #21064
+10-04-2026 09:55:28.014770 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #20998
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 15947 / 0000000000003e4b0000000000000000
+Class        : WBSSaaS\Logger
+User         : sheev.palpatine / ID:5
+Session      : KbB4kkxV3b1v0NIr5AFmhCL78jjFEx8dRMXpGa5FW9s
+Referer      : https://staging.phoenix-whistleblowing.com/product/free-plan/?swcfpc=1
+URI          : /product/free-plan/?swcfpc=1
+User Agent   : Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0
+IP / Hostname: 10.30.112.98 / 10.30.112.98
+10-04-2026 10:05:46.200709 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #15947
+10-04-2026 10:05:46.200766 [INFO] wbssaas.gform.check.domain:234 : Start hook Check domain
+10-04-2026 10:05:46.201441 [DEBUG] wbssaas.gform.check.domain:239 : Current GF Entry filled by the customer => 
+10-04-2026 10:05:46.201529 [DEBUG] wbssaas.gform.check.domain:240 : Array
+(
+    [id] => 
+    [post_id] => 
+    [date_created] => 
+    [date_updated] => 
+    [form_id] => 70
+    [ip] => 10.30.112.98
+    [source_url] => https://staging.phoenix-whistleblowing.com/product/free-plan/?swcfpc=1
+    [user_agent] => Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0
+    [created_by] => 5
+    [source_id] => 
+    [currency] => USD
+    [1] => 
+    [3] => Acme Nico 5
+    [9] => singapore
+    [4] => acme-nico-5
+    [5] => whistleblowing.direct
+    [6] => 
+)
+
+10-04-2026 10:05:46.201579 [DEBUG] wbssaas.gform.check.domain:250 : Current plan => free
+10-04-2026 10:05:46.201615 [DEBUG] wbssaas.gform.check.domain:294 : Tenant URL => https://acme-nico-5.whistleblowing.direct
+10-04-2026 10:05:46.202966 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #15947
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 17327 / 00000000000043af0000000000000000
+Class        : WBSSaaS\Logger
+User         : sheev.palpatine / ID:5
+Session      : KbB4kkxV3b1v0NIr5AFmhCL78jjFEx8dRMXpGa5FW9s
+Referer      : https://staging.phoenix-whistleblowing.com/checkout/?swcfpc=1
+URI          : /?wc-ajax=checkout
+User Agent   : Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0
+IP / Hostname: 10.30.112.98 / 10.30.112.98
+10-04-2026 10:05:58.864104 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #17327
+10-04-2026 10:05:58.864200 [INFO] wbssaas.wc.theme.order.completed:467 : Start hook Theme Payment Completed
+10-04-2026 10:05:58.869136 [WARNING] wbssaas.wc.theme.order.completed:573 : This is not a payment for a theme.
+10-04-2026 10:05:58.869250 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #17327
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 17896 / 00000000000045e80000000000000000
+Class        : WBSSaaS\Logger
+User         : sheev.palpatine / ID:5
+Session      : KbB4kkxV3b1v0NIr5AFmhCL78jjFEx8dRMXpGa5FW9s
+Referer      : https://staging.phoenix-whistleblowing.com/checkout/?swcfpc=1
+URI          : /?wc-ajax=checkout
+User Agent   : Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0
+IP / Hostname: 10.30.112.98 / 10.30.112.98
+10-04-2026 10:06:00.504295 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #17896
+10-04-2026 10:06:00.504330 [INFO] wbssaas.wcs.plan.payment.complete:37 : Start hook Plan WC Subscription Payment complete
+10-04-2026 10:06:00.504592 [DEBUG] wbssaas.wcs.plan.payment.complete:45 : Get the WC_Subscription ID Phoenix Plan => 30596
+10-04-2026 10:06:00.505381 [DEBUG] wbssaas.wcs.plan.payment.complete:55 : Current WC_Subscription: Get related renewal(s) =>
+10-04-2026 10:06:00.505436 [DEBUG] wbssaas.wcs.plan.payment.complete:56 : Array
+(
+)
+
+10-04-2026 10:06:00.505923 [DEBUG] wbssaas.wcs.plan.payment.complete:67 : Current WC_Subscription: Get switch order(s) =>
+10-04-2026 10:06:00.505963 [DEBUG] wbssaas.wcs.plan.payment.complete:68 : Array
+(
+)
+
+10-04-2026 10:06:00.505982 [DEBUG] wbssaas.wcs.plan.payment.complete:69 : 
+10-04-2026 10:06:00.506041 [DEBUG] wbssaas.wcs.plan.payment.complete:90 : Step #1: New WC_Subscription with the ID => 31261
+10-04-2026 10:06:00.506071 [DEBUG] wbssaas.wcs.plan.payment.complete:93 : Step #2: New WC_Order with the ID from Subscription => 31260
+10-04-2026 10:06:00.510552 [DEBUG] wbssaas.wcs.plan.payment.complete:111 : Step #3: Get GF Entry created during the checkout =>
+10-04-2026 10:06:00.510613 [DEBUG] wbssaas.wcs.plan.payment.complete:112 : Array
+(
+    [id] => 2512
+    [form_id] => 70
+    [post_id] => 
+    [date_created] => 2026-04-10 03:05:57
+    [date_updated] => 2026-04-10 03:05:57
+    [is_starred] => 0
+    [is_read] => 0
+    [ip] => 10.30.112.98
+    [source_url] => https://staging.phoenix-whistleblowing.com/product/free-plan/?swcfpc=1
+    [user_agent] => API
+    [currency] => USD
+    [payment_status] => pending
+    [payment_date] => 
+    [payment_amount] => 
+    [payment_method] => 
+    [transaction_id] => 
+    [is_fulfilled] => 
+    [created_by] => 5
+    [transaction_type] => 0
+    [status] => active
+    [source_id] => 
+    [3] => Acme Nico 5
+    [9] => singapore
+    [4] => acme-nico-5
+    [5] => whistleblowing.direct
+    [1] => 
+    [7] => 
+    [8] => 
+    [6] => 
+    [submission_speeds] => 
+)
+
+10-04-2026 10:06:00.510646 [DEBUG] wbssaas.wcs.plan.payment.complete:122 : Current plan => free
+10-04-2026 10:06:00.510700 [DEBUG] wbssaas.wcs.plan.payment.complete:141 : Value of the entry FQDN with Phoenix domain => https://acme-nico-5.stg.whistleblowing.direct
+10-04-2026 10:06:00.510727 [DEBUG] wbssaas.wcs.plan.payment.complete:164 : SaaS URL => https://acme-nico-5.stg.whistleblowing.direct
+10-04-2026 10:06:00.510823 [INFO] wbssaas.wcs.plan.payment.complete:174 : Step #4: Default package => 
+10-04-2026 10:06:00.510859 [INFO] wbssaas.wcs.plan.payment.complete:175 : Array
+(
+    [webforms] => Array
+        (
+            [0] => short
+            [1] => medium
+            [2] => long
+        )
+
+    [phone] => 0
+    [email] => 0
+    [im] => 0
+    [postmail] => 0
+    [chat] => 0
+    [mobileapp] => 0
+    [languages] => 1
+    [users] => Array
+        (
+            [manager] => 1
+            [operator] => 0
+            [agent] => 0
+        )
+
+    [themes] => Array
+        (
+            [0] => phoenix_1
+        )
+
+)
+
+10-04-2026 10:06:00.510951 [DEBUG] wbssaas.wcs.plan.payment.complete:188 : Data send to Phoenix API =>
+10-04-2026 10:06:00.510980 [DEBUG] wbssaas.wcs.plan.payment.complete:189 : Array
+(
+    [company_name] => Acme Nico 5
+    [company_url] => https://acme-nico-5.stg.whistleblowing.direct
+    [admin_email] => dnd+phoenixcustomer@integrity-asia.com
+    [default_lang] => en
+    [package] => Array
+        (
+            [webforms] => Array
+                (
+                    [0] => short
+                    [1] => medium
+                    [2] => long
+                )
+
+            [phone] => 0
+            [email] => 0
+            [im] => 0
+            [postmail] => 0
+            [chat] => 0
+            [mobileapp] => 0
+            [languages] => 1
+            [users] => Array
+                (
+                    [manager] => 1
+                    [operator] => 0
+                    [agent] => 0
+                )
+
+            [themes] => Array
+                (
+                    [0] => phoenix_1
+                )
+
+        )
+
+    [created] => 2026-04-10 05:06:00
+    [modified] => 2026-04-10 05:06:00
+    [expired] => 2026-05-10 05:05:57
+)
+
+10-04-2026 10:06:00.511020 [DEBUG] WBSSaaS.PhoenixAPI.createTenant:155 : JSON for new client (Payload) => 
+10-04-2026 10:06:00.511042 [DEBUG] WBSSaaS.PhoenixAPI.createTenant:156 : {"company_name":"Acme Nico 5","company_url":"https:\/\/acme-nico-5.stg.whistleblowing.direct","admin_email":"dnd+phoenixcustomer@integrity-asia.com","default_lang":"en","package":{"webforms":["short","medium","long"],"phone":0,"email":0,"im":0,"postmail":0,"chat":0,"mobileapp":0,"languages":1,"users":{"manager":1,"operator":0,"agent":0},"themes":["phoenix_1"]},"created":"2026-04-10 05:06:00","modified":"2026-04-10 05:06:00","expired":"2026-05-10 05:05:57"}
+10-04-2026 10:06:00.622325 [DEBUG] wbssaas.wcs.plan.payment.complete:197 : Step #5: Response from API after creating new Tenant =>
+10-04-2026 10:06:00.622439 [DEBUG] wbssaas.wcs.plan.payment.complete:198 : stdClass Object
+(
+    [success] => 1
+    [data] => stdClass Object
+        (
+            [uuid] => e3a2b56c-c33b-448b-99e4-2073af605f18
+        )
+
+    [message] => Success
+)
+
+10-04-2026 10:06:00.641368 [INFO] wbssaas.wcs.plan.payment.complete:214 : Step #6: Update the GF Entry with the UUID successfully
+10-04-2026 10:06:00.641472 [INFO] wbssaas.wcs.plan.payment.complete:229 : Step #7: No need to create DNS records in Cloudflare because the location is Staging
+10-04-2026 10:06:00.644775 [INFO] wbssaas.wcs.plan.payment.complete:292 : Step #8: New client saved in Database with the ID => 188
+10-04-2026 10:06:00.644867 [INFO] wbssaas.wcs.plan.payment.complete:295 : End of WC Cycle. New client created successfully: Acme Nico 5
+10-04-2026 10:06:00.644913 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #17896
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 18012 / 000000000000465c0000000000000000
+Class        : WBSSaaS\Logger
+User         : sheev.palpatine / ID:5
+Session      : KbB4kkxV3b1v0NIr5AFmhCL78jjFEx8dRMXpGa5FW9s
+Referer      : https://staging.phoenix-whistleblowing.com/checkout/?swcfpc=1
+URI          : /?wc-ajax=checkout
+User Agent   : Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0
+IP / Hostname: 10.30.112.98 / 10.30.112.98
+10-04-2026 10:06:00.653016 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #18012
+10-04-2026 10:06:00.653059 [INFO] wbssaas.wcs.addon.payment.complete:333 : Start hook Addon Payment complete
+10-04-2026 10:06:00.653109 [WARNING] wbssaas.wcs.addon.payment.complete:445 : This is not a payment for an Addon.
+10-04-2026 10:06:00.653179 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #18012
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 16196 / 0000000000003f440000000000000000
+Class        : WBSSaaS\Logger
+User         : sheev.palpatine / ID:5
+Session      : KbB4kkxV3b1v0NIr5AFmhCL78jjFEx8dRMXpGa5FW9s
+Referer      : https://staging.phoenix-whistleblowing.com/checkout/?swcfpc=1
+URI          : /checkout/order-received/31260/?key=wc_order_f1M2UKNjIaaBp
+User Agent   : Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0
+IP / Hostname: 10.30.112.98 / 10.30.112.98
+10-04-2026 10:06:03.135977 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #16196
+10-04-2026 10:06:03.136018 [DEBUG] :26 : Start render template porto-child/woocommerce/checkout/thankyou.php
+10-04-2026 10:06:03.137923 [DEBUG] :53 : Is Renewal Order =>
+10-04-2026 10:06:03.137992 [DEBUG] :54 : 
+10-04-2026 10:06:03.138027 [DEBUG] :61 : Is WBS Upgrade Handled =>
+10-04-2026 10:06:03.138045 [DEBUG] :62 : 
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 20293 / 0000000000004f450000000000000000
+Class        : WBSSaaS\Logger
+User         : sheev.palpatine / ID:5
+Session      : KbB4kkxV3b1v0NIr5AFmhCL78jjFEx8dRMXpGa5FW9s
+Referer      : https://staging.phoenix-whistleblowing.com/checkout/?swcfpc=1
+URI          : /checkout/order-received/31260/?key=wc_order_f1M2UKNjIaaBp
+User Agent   : Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0
+IP / Hostname: 10.30.112.98 / 10.30.112.98
+10-04-2026 10:06:03.141284 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #20293
+10-04-2026 10:06:03.141312 [DEBUG] :7 : Start render template porto-child/woocommerce/checkout/order-phoenix.php
+10-04-2026 10:06:03.148334 [DEBUG] :21 : GF Entry created by the WC_Subscription =>
+10-04-2026 10:06:03.148412 [DEBUG] :22 : Array
+(
+    [id] => 2512
+    [form_id] => 70
+    [post_id] => 
+    [date_created] => 2026-04-10 03:05:57
+    [date_updated] => 2026-04-10 03:05:57
+    [is_starred] => 0
+    [is_read] => 0
+    [ip] => 10.30.112.98
+    [source_url] => https://staging.phoenix-whistleblowing.com/product/free-plan/?swcfpc=1
+    [user_agent] => API
+    [currency] => USD
+    [payment_status] => completed
+    [payment_date] => 2026-04-10 03:05:57
+    [payment_amount] => 0.00
+    [payment_method] => WooCommerce
+    [transaction_id] => 
+    [is_fulfilled] => 
+    [created_by] => 5
+    [transaction_type] => 0
+    [status] => active
+    [source_id] => 
+    [3] => Acme Nico 5
+    [9] => staging
+    [4] => acme-nico-5
+    [5] => whistleblowing.direct
+    [1] => e3a2b56c-c33b-448b-99e4-2073af605f18
+    [7] => 
+    [8] => 
+    [6] => 
+    [submission_speeds] => 
+)
+
+10-04-2026 10:06:03.148449 [DEBUG] :30 : Current plan => free
+10-04-2026 10:06:03.148471 [DEBUG] :34 : UUID of the current tenant => e3a2b56c-c33b-448b-99e4-2073af605f18
+10-04-2026 10:06:03.148538 [DEBUG] :40 : Customer email => dnd+phoenixcustomer@integrity-asia.com
+10-04-2026 10:06:03.221612 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #20293
+10-04-2026 10:06:03.377485 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #16196
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 21155 / 00000000000052a30000000000000000
+Class        : WBSSaaS\PhoenixAPI
+User         : sheev.palpatine / ID:5
+Session      : KbB4kkxV3b1v0NIr5AFmhCL78jjFEx8dRMXpGa5FW9s
+Referer      : https://staging.phoenix-whistleblowing.com/checkout/order-received/31255/?key=wc_order_burUhuQ4ceIB9
+URI          : /my-account/workspaces/?swcfpc=1
+User Agent   : Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0
+IP / Hostname: 10.30.112.98 / 10.30.112.98
+10-04-2026 10:38:52.251784 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #21155
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 21157 / 00000000000052a50000000000000000
+Class        : WBSSaaS\PhoenixAPI
+User         : sheev.palpatine / ID:5
+Session      : KbB4kkxV3b1v0NIr5AFmhCL78jjFEx8dRMXpGa5FW9s
+Referer      : https://staging.phoenix-whistleblowing.com/checkout/order-received/31255/?key=wc_order_burUhuQ4ceIB9
+URI          : /my-account/workspaces/?swcfpc=1
+User Agent   : Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0
+IP / Hostname: 10.30.112.98 / 10.30.112.98
+10-04-2026 10:38:52.464688 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #21157
+10-04-2026 10:38:52.464728 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #21155
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 20608 / 00000000000050800000000000000000
+Class        : WBSSaaS\PhoenixAPI
+User         : sheev.palpatine / ID:5
+Session      : KbB4kkxV3b1v0NIr5AFmhCL78jjFEx8dRMXpGa5FW9s
+Referer      : https://staging.phoenix-whistleblowing.com/checkout/order-received/31255/?key=wc_order_burUhuQ4ceIB9
+URI          : /my-account/workspaces/?swcfpc=1
+User Agent   : Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0
+IP / Hostname: 10.30.112.98 / 10.30.112.98
+10-04-2026 10:38:53.087153 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #20608
+10-04-2026 10:38:53.087208 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #21157
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 21203 / 00000000000052d30000000000000000
+Class        : WBSSaaS\PhoenixAPI
+User         : sheev.palpatine / ID:5
+Session      : KbB4kkxV3b1v0NIr5AFmhCL78jjFEx8dRMXpGa5FW9s
+Referer      : https://staging.phoenix-whistleblowing.com/checkout/order-received/31255/?key=wc_order_burUhuQ4ceIB9
+URI          : /my-account/workspaces/?swcfpc=1
+User Agent   : Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0
+IP / Hostname: 10.30.112.98 / 10.30.112.98
+10-04-2026 10:38:53.399624 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #21203
+10-04-2026 10:38:53.399666 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #20608
+10-04-2026 10:38:53.586913 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #21203
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 15694 / 0000000000003d4e0000000000000000
+Class        : WBSSaaS\PhoenixAPI
+User         : sheev.palpatine / ID:5
+Session      : KbB4kkxV3b1v0NIr5AFmhCL78jjFEx8dRMXpGa5FW9s
+Referer      : https://staging.phoenix-whistleblowing.com/upgrade-plan/?sub_id=31261&swcfpc=1
+URI          : /my-account/workspaces/?swcfpc=1
+User Agent   : Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0
+IP / Hostname: 10.30.112.98 / 10.30.112.98
+10-04-2026 11:07:45.747525 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #15694
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 21166 / 00000000000052ae0000000000000000
+Class        : WBSSaaS\PhoenixAPI
+User         : sheev.palpatine / ID:5
+Session      : KbB4kkxV3b1v0NIr5AFmhCL78jjFEx8dRMXpGa5FW9s
+Referer      : https://staging.phoenix-whistleblowing.com/upgrade-plan/?sub_id=31261&swcfpc=1
+URI          : /my-account/workspaces/?swcfpc=1
+User Agent   : Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0
+IP / Hostname: 10.30.112.98 / 10.30.112.98
+10-04-2026 11:07:45.928842 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #21166
+10-04-2026 11:07:45.928883 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #15694
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 20607 / 000000000000507f0000000000000000
+Class        : WBSSaaS\PhoenixAPI
+User         : sheev.palpatine / ID:5
+Session      : KbB4kkxV3b1v0NIr5AFmhCL78jjFEx8dRMXpGa5FW9s
+Referer      : https://staging.phoenix-whistleblowing.com/upgrade-plan/?sub_id=31261&swcfpc=1
+URI          : /my-account/workspaces/?swcfpc=1
+User Agent   : Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0
+IP / Hostname: 10.30.112.98 / 10.30.112.98
+10-04-2026 11:07:47.561007 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #20607
+10-04-2026 11:07:47.561050 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #21166
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 21203 / 00000000000052d30000000000000000
+Class        : WBSSaaS\PhoenixAPI
+User         : sheev.palpatine / ID:5
+Session      : KbB4kkxV3b1v0NIr5AFmhCL78jjFEx8dRMXpGa5FW9s
+Referer      : https://staging.phoenix-whistleblowing.com/upgrade-plan/?sub_id=31261&swcfpc=1
+URI          : /my-account/workspaces/?swcfpc=1
+User Agent   : Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0
+IP / Hostname: 10.30.112.98 / 10.30.112.98
+10-04-2026 11:07:47.846787 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #21203
+10-04-2026 11:07:47.846832 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #20607
+10-04-2026 11:07:48.034413 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #21203
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 15686 / 0000000000003d460000000000000000
+Class        : WBSSaaS\PhoenixAPI
+User         : sheev.palpatine / ID:5
+Session      : KbB4kkxV3b1v0NIr5AFmhCL78jjFEx8dRMXpGa5FW9s
+Referer      : https://staging.phoenix-whistleblowing.com/my-account/my-billing/?swcfpc=1
+URI          : /my-account/workspaces/?swcfpc=1
+User Agent   : Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0
+IP / Hostname: 10.30.112.98 / 10.30.112.98
+10-04-2026 14:24:28.893628 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #15686
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 21157 / 00000000000052a50000000000000000
+Class        : WBSSaaS\PhoenixAPI
+User         : sheev.palpatine / ID:5
+Session      : KbB4kkxV3b1v0NIr5AFmhCL78jjFEx8dRMXpGa5FW9s
+Referer      : https://staging.phoenix-whistleblowing.com/my-account/my-billing/?swcfpc=1
+URI          : /my-account/workspaces/?swcfpc=1
+User Agent   : Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0
+IP / Hostname: 10.30.112.98 / 10.30.112.98
+10-04-2026 14:24:29.096418 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #21157
+10-04-2026 14:24:29.096455 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #15686
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 20598 / 00000000000050760000000000000000
+Class        : WBSSaaS\PhoenixAPI
+User         : sheev.palpatine / ID:5
+Session      : KbB4kkxV3b1v0NIr5AFmhCL78jjFEx8dRMXpGa5FW9s
+Referer      : https://staging.phoenix-whistleblowing.com/my-account/my-billing/?swcfpc=1
+URI          : /my-account/workspaces/?swcfpc=1
+User Agent   : Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0
+IP / Hostname: 10.30.112.98 / 10.30.112.98
+10-04-2026 14:24:29.669347 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #20598
+10-04-2026 14:24:29.669381 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #21157
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 21194 / 00000000000052ca0000000000000000
+Class        : WBSSaaS\PhoenixAPI
+User         : sheev.palpatine / ID:5
+Session      : KbB4kkxV3b1v0NIr5AFmhCL78jjFEx8dRMXpGa5FW9s
+Referer      : https://staging.phoenix-whistleblowing.com/my-account/my-billing/?swcfpc=1
+URI          : /my-account/workspaces/?swcfpc=1
+User Agent   : Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0
+IP / Hostname: 10.30.112.98 / 10.30.112.98
+10-04-2026 14:24:29.860459 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #21194
+10-04-2026 14:24:29.860495 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #20598
+10-04-2026 14:24:30.031650 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #21194

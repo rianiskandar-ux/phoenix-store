@@ -1,0 +1,258 @@
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 15978 / 0000000000003e6a0000000000000000
+Class        : WBSSaaS\Logger
+User         : apip.subarkah / ID:74
+Session      : No Session Token
+Referer      : https://staging.phoenix-whistleblowing.com/checkout/
+URI          : /?wc-ajax=checkout
+User Agent   : Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36
+IP / Hostname: 10.30.112.22 / 10.30.112.22
+13-04-2026 09:19:13.088960 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #15978
+13-04-2026 09:19:13.089010 [INFO] wbssaas.wc.theme.order.completed:467 : Start hook Theme Payment Completed
+13-04-2026 09:19:13.092862 [WARNING] wbssaas.wc.theme.order.completed:573 : This is not a payment for a theme.
+13-04-2026 09:19:13.092943 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #15978
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 17011 / 00000000000042730000000000000000
+Class        : WBSSaaS\Logger
+User         : apip.subarkah / ID:74
+Session      : No Session Token
+Referer      : https://staging.phoenix-whistleblowing.com/checkout/
+URI          : /?wc-ajax=checkout
+User Agent   : Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36
+IP / Hostname: 10.30.112.22 / 10.30.112.22
+13-04-2026 09:19:27.749797 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #17011
+13-04-2026 09:19:27.749826 [INFO] wbssaas.wcs.plan.payment.complete:37 : Start hook Plan WC Subscription Payment complete
+13-04-2026 09:19:27.750109 [DEBUG] wbssaas.wcs.plan.payment.complete:45 : Get the WC_Subscription ID Phoenix Plan => 30596
+13-04-2026 09:19:27.750809 [DEBUG] wbssaas.wcs.plan.payment.complete:55 : Current WC_Subscription: Get related renewal(s) =>
+13-04-2026 09:19:27.750848 [DEBUG] wbssaas.wcs.plan.payment.complete:56 : Array
+(
+)
+
+13-04-2026 09:19:27.751315 [DEBUG] wbssaas.wcs.plan.payment.complete:67 : Current WC_Subscription: Get switch order(s) =>
+13-04-2026 09:19:27.751346 [DEBUG] wbssaas.wcs.plan.payment.complete:68 : Array
+(
+)
+
+13-04-2026 09:19:27.751363 [DEBUG] wbssaas.wcs.plan.payment.complete:69 : 
+13-04-2026 09:19:27.751405 [DEBUG] wbssaas.wcs.plan.payment.complete:90 : Step #1: New WC_Subscription with the ID => 31348
+13-04-2026 09:19:27.751426 [DEBUG] wbssaas.wcs.plan.payment.complete:93 : Step #2: New WC_Order with the ID from Subscription => 31347
+13-04-2026 09:19:27.755931 [DEBUG] wbssaas.wcs.plan.payment.complete:111 : Step #3: Get GF Entry created during the checkout =>
+13-04-2026 09:19:27.755984 [DEBUG] wbssaas.wcs.plan.payment.complete:112 : Array
+(
+    [id] => 2526
+    [form_id] => 70
+    [post_id] => 
+    [date_created] => 2026-04-13 02:19:12
+    [date_updated] => 2026-04-13 02:19:12
+    [is_starred] => 0
+    [is_read] => 0
+    [ip] => 10.30.112.22
+    [source_url] => https://staging.phoenix-whistleblowing.com/product/free-plan/
+    [user_agent] => API
+    [currency] => USD
+    [payment_status] => pending
+    [payment_date] => 
+    [payment_amount] => 
+    [payment_method] => 
+    [transaction_id] => 
+    [is_fulfilled] => 
+    [created_by] => 74
+    [transaction_type] => 0
+    [status] => active
+    [source_id] => 
+    [3] => Insalusi
+    [9] => indonesia
+    [4] => insalusi
+    [5] => whistleblowing.direct
+    [1] => 
+    [7] => 
+    [8] => 
+    [6] => 
+    [submission_speeds] => 
+)
+
+13-04-2026 09:19:27.756016 [DEBUG] wbssaas.wcs.plan.payment.complete:122 : Current plan => free
+13-04-2026 09:19:27.756055 [DEBUG] wbssaas.wcs.plan.payment.complete:141 : Value of the entry FQDN with Phoenix domain => https://insalusi.stg.whistleblowing.direct
+13-04-2026 09:19:27.756081 [DEBUG] wbssaas.wcs.plan.payment.complete:164 : SaaS URL => https://insalusi.stg.whistleblowing.direct
+13-04-2026 09:19:27.756147 [INFO] wbssaas.wcs.plan.payment.complete:174 : Step #4: Default package => 
+13-04-2026 09:19:27.756202 [INFO] wbssaas.wcs.plan.payment.complete:175 : Array
+(
+    [webforms] => Array
+        (
+            [0] => short
+            [1] => medium
+            [2] => long
+        )
+
+    [phone] => 0
+    [email] => 0
+    [im] => 0
+    [postmail] => 0
+    [chat] => 0
+    [mobileapp] => 0
+    [languages] => 1
+    [users] => Array
+        (
+            [manager] => 1
+            [operator] => 0
+            [agent] => 0
+        )
+
+    [themes] => Array
+        (
+            [0] => phoenix_1
+        )
+
+)
+
+13-04-2026 09:19:27.756311 [DEBUG] wbssaas.wcs.plan.payment.complete:188 : Data send to Phoenix API =>
+13-04-2026 09:19:27.756339 [DEBUG] wbssaas.wcs.plan.payment.complete:189 : Array
+(
+    [company_name] => Insalusi
+    [company_url] => https://insalusi.stg.whistleblowing.direct
+    [admin_email] => apip.subarkah+insalusi@integrity-asia.com
+    [default_lang] => en
+    [package] => Array
+        (
+            [webforms] => Array
+                (
+                    [0] => short
+                    [1] => medium
+                    [2] => long
+                )
+
+            [phone] => 0
+            [email] => 0
+            [im] => 0
+            [postmail] => 0
+            [chat] => 0
+            [mobileapp] => 0
+            [languages] => 1
+            [users] => Array
+                (
+                    [manager] => 1
+                    [operator] => 0
+                    [agent] => 0
+                )
+
+            [themes] => Array
+                (
+                    [0] => phoenix_1
+                )
+
+        )
+
+    [created] => 2026-04-13 04:19:27
+    [modified] => 2026-04-13 04:19:27
+    [expired] => 2026-05-13 04:19:11
+)
+
+13-04-2026 09:19:27.756392 [DEBUG] WBSSaaS.PhoenixAPI.createTenant:155 : JSON for new client (Payload) => 
+13-04-2026 09:19:27.756408 [DEBUG] WBSSaaS.PhoenixAPI.createTenant:156 : {"company_name":"Insalusi","company_url":"https:\/\/insalusi.stg.whistleblowing.direct","admin_email":"apip.subarkah+insalusi@integrity-asia.com","default_lang":"en","package":{"webforms":["short","medium","long"],"phone":0,"email":0,"im":0,"postmail":0,"chat":0,"mobileapp":0,"languages":1,"users":{"manager":1,"operator":0,"agent":0},"themes":["phoenix_1"]},"created":"2026-04-13 04:19:27","modified":"2026-04-13 04:19:27","expired":"2026-05-13 04:19:11"}
+13-04-2026 09:19:27.861367 [DEBUG] wbssaas.wcs.plan.payment.complete:197 : Step #5: Response from API after creating new Tenant =>
+13-04-2026 09:19:27.861449 [DEBUG] wbssaas.wcs.plan.payment.complete:198 : stdClass Object
+(
+    [success] => 1
+    [data] => stdClass Object
+        (
+            [uuid] => 13523756-c177-4ca1-8885-804baeb3346d
+        )
+
+    [message] => Success
+)
+
+13-04-2026 09:19:27.871393 [INFO] wbssaas.wcs.plan.payment.complete:214 : Step #6: Update the GF Entry with the UUID successfully
+13-04-2026 09:19:27.871490 [INFO] wbssaas.wcs.plan.payment.complete:229 : Step #7: No need to create DNS records in Cloudflare because the location is Staging
+13-04-2026 09:19:27.878019 [INFO] wbssaas.wcs.plan.payment.complete:292 : Step #8: New client saved in Database with the ID => 192
+13-04-2026 09:19:27.878104 [INFO] wbssaas.wcs.plan.payment.complete:295 : End of WC Cycle. New client created successfully: Insalusi
+13-04-2026 09:19:27.878136 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #17011
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 17595 / 00000000000044bb0000000000000000
+Class        : WBSSaaS\Logger
+User         : apip.subarkah / ID:74
+Session      : No Session Token
+Referer      : https://staging.phoenix-whistleblowing.com/checkout/
+URI          : /?wc-ajax=checkout
+User Agent   : Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36
+IP / Hostname: 10.30.112.22 / 10.30.112.22
+13-04-2026 09:19:27.890761 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #17595
+13-04-2026 09:19:27.890800 [INFO] wbssaas.wcs.addon.payment.complete:333 : Start hook Addon Payment complete
+13-04-2026 09:19:27.890865 [WARNING] wbssaas.wcs.addon.payment.complete:445 : This is not a payment for an Addon.
+13-04-2026 09:19:27.890898 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #17595
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 19793 / 0000000000004d510000000000000000
+Class        : WBSSaaS\Logger
+User         : apip.subarkah / ID:74
+Session      : LTzpkJI32JjIKjnlh1uqz7z2zFYXzIAlBs108aXv90m
+Referer      : https://staging.phoenix-whistleblowing.com/checkout/
+URI          : /checkout/order-received/31347/?key=wc_order_frsSiuXfsKEtj
+User Agent   : Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36
+IP / Hostname: 10.30.112.22 / 10.30.112.22
+13-04-2026 09:19:31.725846 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #19793
+13-04-2026 09:19:31.725885 [DEBUG] :26 : Start render template porto-child/woocommerce/checkout/thankyou.php
+13-04-2026 09:19:31.727674 [DEBUG] :53 : Is Renewal Order =>
+13-04-2026 09:19:31.727721 [DEBUG] :54 : 
+13-04-2026 09:19:31.727751 [DEBUG] :61 : Is WBS Upgrade Handled =>
+13-04-2026 09:19:31.727767 [DEBUG] :62 : 
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 19791 / 0000000000004d4f0000000000000000
+Class        : WBSSaaS\Logger
+User         : apip.subarkah / ID:74
+Session      : LTzpkJI32JjIKjnlh1uqz7z2zFYXzIAlBs108aXv90m
+Referer      : https://staging.phoenix-whistleblowing.com/checkout/
+URI          : /checkout/order-received/31347/?key=wc_order_frsSiuXfsKEtj
+User Agent   : Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36
+IP / Hostname: 10.30.112.22 / 10.30.112.22
+13-04-2026 09:19:31.730460 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #19791
+13-04-2026 09:19:31.730480 [DEBUG] :7 : Start render template porto-child/woocommerce/checkout/order-phoenix.php
+13-04-2026 09:19:31.736358 [DEBUG] :21 : GF Entry created by the WC_Subscription =>
+13-04-2026 09:19:31.736418 [DEBUG] :22 : Array
+(
+    [id] => 2526
+    [form_id] => 70
+    [post_id] => 
+    [date_created] => 2026-04-13 02:19:12
+    [date_updated] => 2026-04-13 02:19:12
+    [is_starred] => 0
+    [is_read] => 0
+    [ip] => 10.30.112.22
+    [source_url] => https://staging.phoenix-whistleblowing.com/product/free-plan/
+    [user_agent] => API
+    [currency] => USD
+    [payment_status] => completed
+    [payment_date] => 2026-04-13 02:19:12
+    [payment_amount] => 0.00
+    [payment_method] => WooCommerce
+    [transaction_id] => 
+    [is_fulfilled] => 
+    [created_by] => 74
+    [transaction_type] => 0
+    [status] => active
+    [source_id] => 
+    [3] => Insalusi
+    [9] => staging
+    [4] => insalusi
+    [5] => whistleblowing.direct
+    [1] => 13523756-c177-4ca1-8885-804baeb3346d
+    [7] => 
+    [8] => 
+    [6] => 
+    [submission_speeds] => 
+)
+
+13-04-2026 09:19:31.736449 [DEBUG] :30 : Current plan => free
+13-04-2026 09:19:31.736466 [DEBUG] :34 : UUID of the current tenant => 13523756-c177-4ca1-8885-804baeb3346d
+13-04-2026 09:19:31.736516 [DEBUG] :40 : Customer email => apip.subarkah+insalusi@integrity-asia.com
+13-04-2026 09:19:31.805749 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #19791
+13-04-2026 09:19:31.889212 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #19793
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 20079 / 0000000000004e6f0000000000000000
+Class        : WBSSaaS\PhoenixAPI
+User         : apip.subarkah / ID:74
+Session      : LTzpkJI32JjIKjnlh1uqz7z2zFYXzIAlBs108aXv90m
+Referer      : https://staging.phoenix-whistleblowing.com/checkout/order-received/31347/?key=wc_order_frsSiuXfsKEtj
+URI          : /my-account/workspaces/?swcfpc=1
+User Agent   : Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36
+IP / Hostname: 10.30.112.22 / 10.30.112.22
+13-04-2026 09:19:47.502379 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #20079
+13-04-2026 09:19:47.675988 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #20079

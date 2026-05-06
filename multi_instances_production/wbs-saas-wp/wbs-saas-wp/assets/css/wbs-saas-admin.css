@@ -1,0 +1,63 @@
+/**
+ * All of the CSS for WBS SaaS admin-specific functionality should be
+ * included in this file.
+ */
+
+.description {
+    font-size: smaller !important;
+}
+
+/* For Tenants Table */
+
+th#id {
+    width: 4em;
+}
+
+th#customer_id {
+    width: 15em;
+}
+
+th#subscription_wc_id {
+    width: 8em;
+}
+
+th#tenant_location {
+    width: 7em;
+}
+
+th#tenant_uuid {
+    width: 13em;
+}
+
+th#created, th#modified, th#subscription_expired {
+    width: 10em;
+}
+
+.expired {
+    text-decoration:line-through;
+}
+
+/* Log Viewer in Devel page */
+
+.log-viewer {
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+    padding: 5px 20px;
+}
+
+.log-viewer pre {
+    font-family: monospace;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/* Admin / Settings Tabs */
+.manage-menus ul, .manage-menus ol {
+    list-style-type: revert;
+    padding: revert;
+}
+
+.manage-menus ol {
+    margin-left: revert;
+}

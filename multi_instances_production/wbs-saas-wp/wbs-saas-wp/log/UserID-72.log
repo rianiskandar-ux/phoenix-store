@@ -1,0 +1,102 @@
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 15918 / 0000000000003e2e0000000000000000
+Class        : WBSSaaS\Logger
+User         : aufaqa.test2 / ID:72
+Session      : dTrrzKUtNTtx6X5PLDqibg3NTRzw9tSP426P9fkpl6E
+Referer      : https://staging.phoenix-whistleblowing.com/product/basic-plan/?swcfpc=1
+URI          : /product/basic-plan/?swcfpc=1
+User Agent   : Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36
+IP / Hostname: 10.30.112.30 / 10.30.112.30
+13-04-2026 09:45:18.383146 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #15918
+13-04-2026 09:45:18.383215 [INFO] wbssaas.gform.check.domain:234 : Start hook Check domain
+13-04-2026 09:45:18.383881 [DEBUG] wbssaas.gform.check.domain:239 : Current GF Entry filled by the customer => 
+13-04-2026 09:45:18.383935 [DEBUG] wbssaas.gform.check.domain:240 : Array
+(
+    [id] => 
+    [post_id] => 
+    [date_created] => 
+    [date_updated] => 
+    [form_id] => 58
+    [ip] => 10.30.112.30
+    [source_url] => https://staging.phoenix-whistleblowing.com/product/basic-plan/?swcfpc=1
+    [user_agent] => Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36
+    [created_by] => 72
+    [source_id] => 
+    [currency] => USD
+    [1] => 
+    [3] => cobaemaildanakun
+    [9] => indonesia
+    [4] => cobaemaildanakun
+    [5] => whistleblowing.direct
+    [6] => 
+)
+
+13-04-2026 09:45:18.383984 [DEBUG] wbssaas.gform.check.domain:250 : Current plan => basic
+13-04-2026 09:45:18.384012 [DEBUG] wbssaas.gform.check.domain:294 : Tenant URL => https://cobaemaildanakun.whistleblowing.direct
+13-04-2026 09:45:18.385274 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #15918
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 13353 / 00000000000034290000000000000000
+Class        : WBSSaaS\PhoenixAPI
+User         : aufaqa.test2 / ID:72
+Session      : dTrrzKUtNTtx6X5PLDqibg3NTRzw9tSP426P9fkpl6E
+Referer      : https://staging.phoenix-whistleblowing.com/checkout/?swcfpc=1
+URI          : /my-account/workspaces/?swcfpc=1
+User Agent   : Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36
+IP / Hostname: 10.30.112.30 / 10.30.112.30
+13-04-2026 09:45:47.322355 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #13353
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 21112 / 00000000000052780000000000000000
+Class        : WBSSaaS\PhoenixAPI
+User         : aufaqa.test2 / ID:72
+Session      : dTrrzKUtNTtx6X5PLDqibg3NTRzw9tSP426P9fkpl6E
+Referer      : https://staging.phoenix-whistleblowing.com/checkout/?swcfpc=1
+URI          : /my-account/workspaces/?swcfpc=1
+User Agent   : Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36
+IP / Hostname: 10.30.112.30 / 10.30.112.30
+13-04-2026 09:45:47.581747 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #21112
+13-04-2026 09:45:47.581783 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #13353
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 21100 / 000000000000526c0000000000000000
+Class        : WBSSaaS\PhoenixAPI
+User         : aufaqa.test2 / ID:72
+Session      : dTrrzKUtNTtx6X5PLDqibg3NTRzw9tSP426P9fkpl6E
+Referer      : https://staging.phoenix-whistleblowing.com/checkout/?swcfpc=1
+URI          : /my-account/workspaces/?swcfpc=1
+User Agent   : Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36
+IP / Hostname: 10.30.112.30 / 10.30.112.30
+13-04-2026 09:45:47.707167 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #21100
+13-04-2026 09:45:47.707221 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #21112
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 21154 / 00000000000052a20000000000000000
+Class        : WBSSaaS\PhoenixAPI
+User         : aufaqa.test2 / ID:72
+Session      : dTrrzKUtNTtx6X5PLDqibg3NTRzw9tSP426P9fkpl6E
+Referer      : https://staging.phoenix-whistleblowing.com/checkout/?swcfpc=1
+URI          : /my-account/workspaces/?swcfpc=1
+User Agent   : Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36
+IP / Hostname: 10.30.112.30 / 10.30.112.30
+13-04-2026 09:45:48.090805 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #21154
+13-04-2026 09:45:48.090855 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #21100
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 21176 / 00000000000052b80000000000000000
+Class        : WBSSaaS\PhoenixAPI
+User         : aufaqa.test2 / ID:72
+Session      : dTrrzKUtNTtx6X5PLDqibg3NTRzw9tSP426P9fkpl6E
+Referer      : https://staging.phoenix-whistleblowing.com/checkout/?swcfpc=1
+URI          : /my-account/workspaces/?swcfpc=1
+User Agent   : Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36
+IP / Hostname: 10.30.112.30 / 10.30.112.30
+13-04-2026 09:45:48.234115 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #21176
+13-04-2026 09:45:48.234153 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #21154
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 21252 / 00000000000053040000000000000000
+Class        : WBSSaaS\PhoenixAPI
+User         : aufaqa.test2 / ID:72
+Session      : dTrrzKUtNTtx6X5PLDqibg3NTRzw9tSP426P9fkpl6E
+Referer      : https://staging.phoenix-whistleblowing.com/checkout/?swcfpc=1
+URI          : /my-account/workspaces/?swcfpc=1
+User Agent   : Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36
+IP / Hostname: 10.30.112.30 / 10.30.112.30
+13-04-2026 09:45:48.543073 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #21252
+13-04-2026 09:45:48.543116 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #21176
+13-04-2026 09:45:48.716436 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #21252

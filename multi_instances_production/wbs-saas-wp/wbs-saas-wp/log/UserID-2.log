@@ -1,0 +1,23 @@
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 17598 / 00000000000044be0000000000000000
+Class        : WBSSaaS\Logger
+User         : nico / ID:2
+Session      : bdGZTICiuUhUfySQQLb2y18jzwubUBBTjVScVDlOS6f
+Referer      : https://staging.phoenix-whistleblowing.com/wp-admin/admin.php?page=snippets
+URI          : /wp-admin/admin.php?page=edit-snippet&id=64&swcfpc=1
+User Agent   : Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36
+IP / Hostname: 10.30.112.98 / 10.30.112.98
+09-04-2026 15:08:55.788334 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #17598
+09-04-2026 15:08:55.788401 [INFO] wbssaas.gform.populate.dropdown.client:345 : Start hook Populate Dropdown Clients
+09-04-2026 15:08:55.795377 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #17598
+----------------------------------------------------------------------------------------------------------------------------------------------
+Object ID    : 18446 / 000000000000480e0000000000000000
+Class        : WBSSaaS\Logger
+User         : nico / ID:2
+Session      : bdGZTICiuUhUfySQQLb2y18jzwubUBBTjVScVDlOS6f
+Referer      : https://staging.phoenix-whistleblowing.com/wp-admin/admin.php?page=wbssaas-slug
+URI          : /wp-admin/admin.php?page=wbssaas-slug&id=178
+User Agent   : Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36
+IP / Hostname: 10.30.112.98 / 10.30.112.98
+09-04-2026 15:26:54.453520 [INFO] WBSSaaS.Logger.construct:128 : Initialization of Object #18446
+09-04-2026 15:26:54.611738 [INFO] WBSSaaS.Logger.destruct:137 : Deallocation of Object #18446

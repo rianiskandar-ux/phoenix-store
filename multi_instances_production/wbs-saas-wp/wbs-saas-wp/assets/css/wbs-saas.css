@@ -1,0 +1,55 @@
+/**
+ * All of the CSS for WBS SaaS publi functionality should be
+ * included in this file.
+ */
+
+/**
+ * For Accordion in {{BASE_URL}}/my-account/phoenix/
+ * 
+ */
+
+.wbssaas-tenants-container * {
+    box-sizing: border-box;
+}
+
+.wbssaas-tenants-row {
+    border-bottom: 1px solid #e7e7e7;
+}
+
+.wbssaas-tenants-column {
+    padding: 1em;
+}
+
+.wbssaas-tenants-sub-column{
+    padding-bottom: .5em;
+}
+
+.wbssaas-tenants-column, .wbssaas-tenants-sub-column {
+    float: left;
+}
+
+.wbssaas-tenants-left {
+    width: 25%;
+}
+  
+.wbssaas-tenants-right {
+    width: 75%;
+}
+
+/* Clear floats after the columns */
+.wbssaas-tenants-row:after, .wbssaas-tenants-clear {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.wbssaas-tenants-btn-inline {
+    margin-left: 2em;
+    padding: 5px 7px;
+    background-color: sandybrown;
+    color: white;
+}
+
+.wbssaas-tenants-btn-inline a, .wbssaas-tenants-btn-inline a:hover {
+    color: white;
+}
