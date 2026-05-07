@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
 const PHOENIX_DOMAINS = [
@@ -62,7 +62,7 @@ const PLAN_CONFIG = {
     },
 };
 
-function GetStartedInner() {
+function GetStartedInner({ initialPrices }) {
     const searchParams = useSearchParams();
 
     const plan = searchParams.get("plan") || "free";
@@ -82,31 +82,7 @@ function GetStartedInner() {
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
 
-    const [planPrices, setPlanPrices] = useState(null);
-
-    useEffect(() => {
-        const base = (process.env.NEXT_PUBLIC_WC_URL || "").replace(/\/$/, "");
-        if (!base) return;
-        const fmt = (minor) => "$" + (parseInt(minor, 10) / 100).toLocaleString("en-US");
-        Promise.all([
-            fetch(`${base}/wp-json/wc/store/v1/products/61`).then(r => r.json()),
-            fetch(`${base}/wp-json/wc/store/v1/products/62`).then(r => r.json()),
-            fetch(`${base}/wp-json/wc/store/v1/products/78`).then(r => r.json()),
-            fetch(`${base}/wp-json/wc/store/v1/products/79`).then(r => r.json()),
-        ]).then(([bm, by, pm, py]) => {
-            setPlanPrices({
-                free: { monthly: "$0" },
-                basic: { monthly: fmt(bm?.prices?.price), yearly: fmt(by?.prices?.price) },
-                premium: { monthly: fmt(pm?.prices?.price), yearly: fmt(py?.prices?.price) },
-            });
-        }).catch(() => {
-            setPlanPrices({
-                free: { monthly: "$0" },
-                basic: { monthly: "—", yearly: "—" },
-                premium: { monthly: "—", yearly: "—" },
-            });
-        });
-    }, []);
+    const [planPrices] = useState(initialPrices);
 
     const currentPrice = !planPrices ? null
         : plan === "free" ? planPrices.free.monthly
@@ -449,10 +425,10 @@ function GetStartedInner() {
     );
 }
 
-export default function GetStartedForm() {
+export default function GetStartedForm({ initialPrices }) {
     return (
         <Suspense fallback={<div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}><p className="text-gray-400 text-sm">Loading...</p></div>}>
-            <GetStartedInner />
+            <GetStartedInner initialPrices={initialPrices} />
         </Suspense>
     );
 }
