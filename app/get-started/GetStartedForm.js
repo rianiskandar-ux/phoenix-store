@@ -1,20 +1,19 @@
 "use client";
 
-import { useState, Suspense } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 
 const PHOENIX_DOMAINS = [
     "whistleblowing.direct",
+    "whistleblowinghotline.net",
+    "whistle-blowing.org",
     "speak-up.link",
-    "speak-up.direct",
-    "whistleblowing.link",
 ];
 
 const SERVER_LOCATIONS = [
-    { value: "eu-west", label: "Europe West (Switzerland)" },
-    { value: "eu-central", label: "Europe Central (Germany)" },
-    { value: "us-east", label: "United States East" },
-    { value: "ap-southeast", label: "Asia Pacific (Singapore)" },
+    { value: "switzerland", label: "Switzerland" },
+    { value: "singapore", label: "Singapore" },
+    { value: "indonesia", label: "Indonesia" },
 ];
 
 const PLAN_CONFIG = {
@@ -65,7 +64,7 @@ const PLAN_CONFIG = {
 
 function GetStartedInner() {
     const searchParams = useSearchParams();
-    const router = useRouter();
+
     const plan = searchParams.get("plan") || "free";
     const config = PLAN_CONFIG[plan] || PLAN_CONFIG.free;
 
@@ -83,14 +82,35 @@ function GetStartedInner() {
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
 
-    const planPrices = {
-        free:    { monthly: "$0" },
-        basic:   { monthly: "$65",  yearly: "$650" },
-        premium: { monthly: "$110", yearly: "$995" },
-    };
-    const currentPrice = plan === "free"
-        ? planPrices.free.monthly
-        : planPrices[plan]?.[payment] || "";
+    const [planPrices, setPlanPrices] = useState(null);
+
+    useEffect(() => {
+        const base = (process.env.NEXT_PUBLIC_WC_URL || "").replace(/\/$/, "");
+        if (!base) return;
+        const fmt = (minor) => "$" + (parseInt(minor, 10) / 100).toLocaleString("en-US");
+        Promise.all([
+            fetch(`${base}/wp-json/wc/store/v1/products/61`).then(r => r.json()),
+            fetch(`${base}/wp-json/wc/store/v1/products/62`).then(r => r.json()),
+            fetch(`${base}/wp-json/wc/store/v1/products/78`).then(r => r.json()),
+            fetch(`${base}/wp-json/wc/store/v1/products/79`).then(r => r.json()),
+        ]).then(([bm, by, pm, py]) => {
+            setPlanPrices({
+                free: { monthly: "$0" },
+                basic: { monthly: fmt(bm?.prices?.price), yearly: fmt(by?.prices?.price) },
+                premium: { monthly: fmt(pm?.prices?.price), yearly: fmt(py?.prices?.price) },
+            });
+        }).catch(() => {
+            setPlanPrices({
+                free: { monthly: "$0" },
+                basic: { monthly: "—", yearly: "—" },
+                premium: { monthly: "—", yearly: "—" },
+            });
+        });
+    }, []);
+
+    const currentPrice = !planPrices ? null
+        : plan === "free" ? planPrices.free.monthly
+        : planPrices[plan]?.[payment] || "—";
 
     function handleChange(e) {
         const { name, value } = e.target;
@@ -138,45 +158,88 @@ function GetStartedInner() {
         }));
 
         const PRODUCT_IDS = {
-            free: 30596,
+            free: { product_id: 30596, variation_id: 30597 },
             basic: { monthly: 61, yearly: 62 },
             premium: { monthly: 78, yearly: 79 },
         };
-        const productId = plan === "free" ? PRODUCT_IDS.free : PRODUCT_IDS[plan]?.[payment];
+        const productEntry = plan === "free" ? PRODUCT_IDS.free : PRODUCT_IDS[plan]?.[payment];
         const base = (process.env.NEXT_PUBLIC_WC_URL || "").replace(/\/$/, "");
 
-        if (!base || !productId) {
+        if (!base || !productEntry) {
             alert("Configuration error. Please contact support.");
             setLoading(false);
             return;
         }
 
-        window.location.href = `${base}/checkout/?add-to-cart=${productId}`;
+        const productId = typeof productEntry === "object" ? productEntry.product_id : productEntry;
+        const variationId = typeof productEntry === "object" ? productEntry.variation_id : null;
+
+        // Call WP endpoint: clear cart, add product, save session → get checkout URL
+        try {
+            const res = await fetch(`${base}/wp-json/phoenix/v1/start-checkout`, {
+                method: "POST",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    phoenix_org: form.orgName,
+                    phoenix_sub: form.subdomain,
+                    phoenix_domain: form.phoenixDomain || "whistleblowing.direct",
+                    phoenix_loc: form.serverLocation,
+                    phoenix_plan: plan,
+                    product_id: productId,
+                    variation_id: variationId,
+                }),
+            });
+            const data = await res.json();
+            if (data.success && data.cart_url) {
+                console.log('[PHOENIX] Redirecting to:', data.cart_url);
+                window.location.href = data.cart_url;
+                return;
+            }
+            if (res.status === 409 || res.status === 422) {
+                const code = data?.code || "";
+                if (code === "duplicate_subdomain") {
+                    setErrors({ subdomain: "This subdomain is already in use. Please choose another one." });
+                } else if (code === "invalid_subdomain" || code === "forbidden_subdomain") {
+                    setErrors({ subdomain: data.message || "Invalid subdomain." });
+                } else {
+                    setErrors({ orgName: "Organisation name already in use. Please choose a different name." });
+                }
+                setLoading(false);
+                return;
+            }
+            throw new Error(data.message || "Checkout init failed");
+        } catch (err) {
+            console.error('[PHOENIX] start-checkout error:', err);
+            setErrors({ orgName: "Checkout failed. Please try again." });
+            setLoading(false);
+        }
     }
 
-    const inputClass = "w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-phoenix-text bg-white focus:outline-none focus:ring-2 focus:ring-phoenix-orange/20 focus:border-phoenix-orange transition-all placeholder:text-gray-400";
-    const labelClass = "block text-sm font-medium text-phoenix-text mb-1";
+    const inputClass = "w-full border border-gray-200 rounded-xl px-5 py-4 text-sm text-phoenix-text bg-white focus:outline-none focus:ring-2 focus:ring-phoenix-orange/20 focus:border-phoenix-orange transition-all placeholder:text-gray-300";
+    const inputError = "w-full border border-red-400 bg-red-50 rounded-xl px-5 py-4 text-sm text-phoenix-text focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-500 transition-all placeholder:text-gray-300";
+    const labelClass = "block text-sm font-medium text-phoenix-text mb-2";
 
     return (
         <div className="min-h-screen bg-gray-50">
             {/* Page banner */}
-            <div style={{background:"linear-gradient(135deg,#fde8e2 0%,#f3e8f8 100%)", paddingTop:"80px", paddingBottom:"40px", textAlign:"center"}}>
+            <div style={{ background: "linear-gradient(135deg,#fde8e2 0%,#f3e8f8 100%)", paddingTop: "80px", paddingBottom: "40px", textAlign: "center" }}>
                 <h1 className="text-2xl font-bold text-phoenix-text">Subscription Page</h1>
             </div>
 
-            <div style={{maxWidth:"1100px", margin:"0 auto", padding:"40px 32px 60px"}}>
+            <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "40px 32px 60px" }}>
                 <div className="flex flex-col-reverse md:grid md:grid-cols-[260px_1fr] gap-8 items-start w-full">
 
                     {/* LEFT: Features */}
-                    <div className="w-full bg-white rounded-xl border border-gray-100 shadow-sm" style={{padding:"24px"}}>
-                        <h2 className="text-base font-bold text-phoenix-text" style={{marginBottom:"16px"}}>Features</h2>
+                    <div className="w-full bg-white rounded-xl border border-gray-100 shadow-sm" style={{ padding: "24px" }}>
+                        <h2 className="text-base font-bold text-phoenix-text" style={{ marginBottom: "16px" }}>Features</h2>
                         {Object.entries(config.features).map(([category, items]) => (
-                            <div key={category} style={{marginBottom:"14px"}}>
-                                <p className="text-xs font-bold text-phoenix-text" style={{marginBottom:"4px"}}>{category}</p>
-                                <ul style={{listStyle:"none", padding:0, margin:0}}>
+                            <div key={category} style={{ marginBottom: "14px" }}>
+                                <p className="text-xs font-bold text-phoenix-text" style={{ marginBottom: "4px" }}>{category}</p>
+                                <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
                                     {items.map((item) => (
-                                        <li key={item} className="text-xs text-gray-500" style={{display:"flex", alignItems:"flex-start", gap:"6px", marginBottom:"2px"}}>
-                                            <span className="text-phoenix-orange" style={{flexShrink:0}}>✓</span>
+                                        <li key={item} className="text-xs text-gray-500" style={{ display: "flex", alignItems: "flex-start", gap: "6px", marginBottom: "2px" }}>
+                                            <span className="text-phoenix-orange" style={{ flexShrink: 0 }}>✓</span>
                                             {item}
                                         </li>
                                     ))}
@@ -190,11 +253,13 @@ function GetStartedInner() {
                         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
 
                             {/* Plan + price header */}
-                            <div style={{padding:"20px 24px 16px", borderBottom:"1px solid #f0f0f0", display:"flex", alignItems:"flex-start", justifyContent:"space-between", gap:"16px"}}>
-                                <p style={{fontSize:"18px", fontWeight:700, color:"#333", margin:0}}>{config.name}</p>
-                                <div style={{textAlign:"right", flexShrink:0}}>
-                                    <p style={{fontSize:"22px", fontWeight:700, color:"#e8431a", margin:0}}>{currentPrice}</p>
-                                    <p style={{fontSize:"11px", color:"#999", margin:"2px 0 0"}}>
+                            <div style={{ padding: "20px 24px 16px", borderBottom: "1px solid #f0f0f0", display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "16px" }}>
+                                <p style={{ fontSize: "18px", fontWeight: 700, color: "#333", margin: 0 }}>{config.name}</p>
+                                <div style={{ textAlign: "right", flexShrink: 0 }}>
+                                    <p style={{ fontSize: "22px", fontWeight: 700, color: "#e8431a", margin: 0 }}>
+                                        {currentPrice === null ? <span style={{fontSize:"14px", color:"#ccc"}}>Loading...</span> : currentPrice}
+                                    </p>
+                                    <p style={{ fontSize: "11px", color: "#999", margin: "2px 0 0" }}>
                                         {plan === "free" ? "free for 6 months" : payment === "monthly" ? "per month" : "per year, billed annually"}
                                     </p>
                                 </div>
@@ -202,12 +267,13 @@ function GetStartedInner() {
 
                             {/* Billing toggle */}
                             {config.hasPaymentToggle && (
-                                <div style={{padding:"12px 24px", borderBottom:"1px solid #f0f0f0", background:"#fafafa", display:"flex", alignItems:"center", justifyContent:"space-between", gap:"16px"}}>
-                                    <p style={{fontSize:"11px", fontWeight:600, color:"#999", textTransform:"uppercase", letterSpacing:"0.5px", margin:0}}>Billing cycle</p>
-                                    <div style={{display:"flex", background:"#e5e7eb", borderRadius:"8px", padding:"3px", gap:"3px"}}>
-                                        {[{value:"monthly",label:"Monthly"},{value:"yearly",label:"Yearly",badge:"Save 17%"}].map((opt) => (
+                                <div style={{ padding: "12px 24px", borderBottom: "1px solid #f0f0f0", background: "#fafafa", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px" }}>
+                                    <p style={{ fontSize: "11px", fontWeight: 600, color: "#999", textTransform: "uppercase", letterSpacing: "0.5px", margin: 0 }}>Billing cycle</p>
+                                    <div style={{ display: "flex", background: "#e5e7eb", borderRadius: "8px", padding: "3px", gap: "3px" }}>
+                                        {[{ value: "monthly", label: "Monthly" }, { value: "yearly", label: "Yearly", badge: "Save 17%" }].map((opt) => (
                                             <button key={opt.value} type="button" onClick={() => setPayment(opt.value)}
-                                                style={{padding:"5px 14px", borderRadius:"6px", fontSize:"12px", fontWeight:600, border:"none", cursor:"pointer", display:"flex", alignItems:"center", gap:"6px", transition:"all 0.15s",
+                                                style={{
+                                                    padding: "5px 14px", borderRadius: "6px", fontSize: "12px", fontWeight: 600, border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: "6px", transition: "all 0.15s",
                                                     background: payment === opt.value ? "white" : "transparent",
                                                     color: payment === opt.value ? "#e8431a" : "#888",
                                                     boxShadow: payment === opt.value ? "0 1px 3px rgba(0,0,0,0.1)" : "none",
@@ -215,7 +281,7 @@ function GetStartedInner() {
                                             >
                                                 {opt.label}
                                                 {opt.badge && (
-                                                    <span style={{fontSize:"10px", fontWeight:700, padding:"1px 6px", borderRadius:"99px", background: payment === opt.value ? "#e8431a" : "#ccc", color:"white"}}>
+                                                    <span style={{ fontSize: "10px", fontWeight: 700, padding: "1px 6px", borderRadius: "99px", background: payment === opt.value ? "#e8431a" : "#ccc", color: "white" }}>
                                                         {opt.badge}
                                                     </span>
                                                 )}
@@ -225,67 +291,51 @@ function GetStartedInner() {
                                 </div>
                             )}
 
-                            <div style={{padding:"28px 24px"}}>
-                                <p className="text-xs text-gray-400" style={{marginBottom:"20px"}}>
-                                    Fields marked with <span className="text-phoenix-orange font-semibold">*</span> are required.
+                            <div style={{ padding: "28px 24px" }}>
+                                <p className="text-xs text-gray-400" style={{ marginBottom: "20px" }}>
+                                    <span className="text-phoenix-orange font-semibold">"*"</span> indicates required fields
                                 </p>
 
                                 <form onSubmit={handleSubmit} className="flex flex-col gap-5">
 
-                                    {/* 1. Organisation */}
+                                    {/* Organisation */}
                                     <div>
-                                        <div className="flex items-center gap-2 mb-3">
-                                            <div className="w-6 h-6 rounded-full bg-phoenix-orange/10 text-phoenix-orange flex items-center justify-center text-xs font-bold flex-shrink-0">1</div>
-                                            <h2 className="text-sm font-semibold text-phoenix-text uppercase tracking-wide">Organisation</h2>
-                                        </div>
-                                        <label className={labelClass}>Full name of your organisation <span className="text-phoenix-orange">*</span></label>
-                                        <input type="text" name="orgName" value={form.orgName} onChange={handleChange} placeholder="E.g. Acme Corporation" className={inputClass} />
+                                        <label className={labelClass}>Enter the full name of your organisation <span className="text-phoenix-orange">*</span></label>
+                                        <input type="text" name="orgName" value={form.orgName} onChange={handleChange} placeholder="E.g. Acme Corporation" className={errors.orgName ? inputError : inputClass} />
                                         {errors.orgName && <p className="text-xs text-red-500 mt-1">{errors.orgName}</p>}
                                     </div>
 
-                                    <hr className="border-gray-100" />
-
-                                    {/* 2. Server Location */}
+                                    {/* Server Location */}
                                     <div>
-                                        <div className="flex items-center gap-2 mb-3">
-                                            <div className="w-6 h-6 rounded-full bg-phoenix-orange/10 text-phoenix-orange flex items-center justify-center text-xs font-bold flex-shrink-0">2</div>
-                                            <h2 className="text-sm font-semibold text-phoenix-text uppercase tracking-wide">Server Location</h2>
-                                        </div>
                                         <label className={labelClass}>Choose your server location <span className="text-phoenix-orange">*</span></label>
-                                        <select name="serverLocation" value={form.serverLocation} onChange={handleChange} className={inputClass}>
+                                        <select name="serverLocation" value={form.serverLocation} onChange={handleChange} className={errors.serverLocation ? inputError : inputClass}>
                                             <option value="">Select the region</option>
                                             {SERVER_LOCATIONS.map((loc) => <option key={loc.value} value={loc.value}>{loc.label}</option>)}
                                         </select>
                                         {errors.serverLocation && <p className="text-xs text-red-500 mt-1">{errors.serverLocation}</p>}
                                     </div>
 
-                                    <hr className="border-gray-100" />
-
-                                    {/* 3. Website Address */}
+                                    {/* Website Address */}
                                     <div>
-                                        <div className="flex items-center gap-2 mb-3">
-                                            <div className="w-6 h-6 rounded-full bg-phoenix-orange/10 text-phoenix-orange flex items-center justify-center text-xs font-bold flex-shrink-0">3</div>
-                                            <h2 className="text-sm font-semibold text-phoenix-text uppercase tracking-wide">Website Address</h2>
-                                        </div>
 
                                         {config.hasDomainOptions ? (
-                                            <div className="flex flex-col" style={{gap:"12px"}}>
+                                            <div className="flex flex-col" style={{ gap: "12px" }}>
                                                 <p className="text-xs text-gray-500">
                                                     Choose the address for your Whistleblowing Application.{" "}
                                                     <span className="text-phoenix-orange font-medium">Cannot be changed after checkout.</span>
                                                 </p>
                                                 {[
-                                                    {value:"phoenix", title:"Use a Phoenix domain", badge:"Recommended", desc:"Subdomain + one of Phoenix's domains", example:"acme.speak-up.link"},
-                                                    {value:"own", title:"Use your own domain", badge:null, desc:"A subdomain on a domain you already own", example:"whistleblowing.acme.com"},
-                                                    {value:"purchased", title:"Use a purchased domain", badge:null, desc:"A domain purchased specifically for this app", example:"acme-whistleblowing.com"},
+                                                    { value: "phoenix", title: "Use a Phoenix domain", badge: "Recommended", desc: "Subdomain + one of Phoenix's domains", example: "acme.speak-up.link" },
+                                                    { value: "own", title: "Use your own domain", badge: null, desc: "A subdomain on a domain you already own", example: "whistleblowing.acme.com" },
+                                                    { value: "purchased", title: "Use a purchased domain", badge: null, desc: "A domain purchased specifically for this app", example: "acme-whistleblowing.com" },
                                                 ].map((opt) => (
                                                     <label key={opt.value}
-                                                        className={`flex items-start cursor-pointer rounded-lg border-2 transition-all ${domainOption===opt.value ? "border-phoenix-orange bg-orange-50" : "border-gray-200 hover:border-gray-300 bg-white"}`}
-                                                        style={{padding:"12px 14px", gap:"12px"}}
+                                                        className={`flex items-start cursor-pointer rounded-lg border-2 transition-all ${domainOption === opt.value ? "border-phoenix-orange bg-orange-50" : "border-gray-200 hover:border-gray-300 bg-white"}`}
+                                                        style={{ padding: "12px 14px", gap: "12px" }}
                                                     >
-                                                        <input type="radio" name="domainOption" value={opt.value} checked={domainOption===opt.value} onChange={()=>setDomainOption(opt.value)} className="mt-0.5 accent-phoenix-orange flex-shrink-0" />
+                                                        <input type="radio" name="domainOption" value={opt.value} checked={domainOption === opt.value} onChange={() => setDomainOption(opt.value)} className="mt-0.5 accent-phoenix-orange flex-shrink-0" />
                                                         <div>
-                                                            <div className="flex items-center" style={{gap:"6px", marginBottom:"2px"}}>
+                                                            <div className="flex items-center" style={{ gap: "6px", marginBottom: "2px" }}>
                                                                 <span className="text-sm font-semibold text-phoenix-text">{opt.title}</span>
                                                                 {opt.badge && <span className="bg-phoenix-orange text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wide">{opt.badge}</span>}
                                                             </div>
@@ -294,13 +344,14 @@ function GetStartedInner() {
                                                     </label>
                                                 ))}
                                                 {domainOption === "phoenix" && (
-                                                    <div className="flex" style={{gap:"12px"}}>
+                                                    <div className="flex" style={{ gap: "12px" }}>
                                                         <div className="flex-1">
-                                                            <label className={labelClass}>Subdomain <span className="text-phoenix-orange">*</span></label>
-                                                            <input type="text" name="subdomain" value={form.subdomain} onChange={handleChange} placeholder="E.g. acme" className={inputClass} />
+                                                            <label className={labelClass}>Enter your subdomain <span className="text-phoenix-orange">*</span></label>
+                                                            <input type="text" name="subdomain" value={form.subdomain} onChange={handleChange} placeholder="E.g. acme" className={errors.subdomain ? inputError : inputClass} />
+                                                            {errors.subdomain && <p className="text-xs text-red-500 mt-1">{errors.subdomain}</p>}
                                                         </div>
                                                         <div className="flex-1">
-                                                            <label className={labelClass}>Phoenix domain <span className="text-phoenix-orange">*</span></label>
+                                                            <label className={labelClass}>Select one of Phoenix's domain <span className="text-phoenix-orange">*</span></label>
                                                             <select name="phoenixDomain" value={form.phoenixDomain} onChange={handleChange} className={inputClass}>
                                                                 {PHOENIX_DOMAINS.map((d) => <option key={d} value={d}>{d}</option>)}
                                                             </select>
@@ -308,7 +359,7 @@ function GetStartedInner() {
                                                     </div>
                                                 )}
                                                 {domainOption === "own" && (
-                                                    <div className="flex" style={{gap:"12px"}}>
+                                                    <div className="flex" style={{ gap: "12px" }}>
                                                         <div className="flex-1">
                                                             <label className={labelClass}>Your subdomain <span className="text-phoenix-orange">*</span></label>
                                                             <input type="text" name="ownSubdomain" value={form.ownSubdomain} onChange={handleChange} placeholder="E.g. whistleblowing" className={inputClass} />
@@ -328,37 +379,37 @@ function GetStartedInner() {
                                                 )}
                                             </div>
                                         ) : (
-                                            <div className="flex flex-col" style={{gap:"12px"}}>
-                                                <div className="flex items-start bg-blue-50 border border-blue-100 rounded-lg" style={{gap:"10px", padding:"12px"}}>
-                                                    <div className="bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0" style={{width:"20px", height:"20px", marginTop:"1px"}}>i</div>
+                                            <div className="flex flex-col" style={{ gap: "20px" }}>
+                                                <div className="flex items-start bg-blue-50 border border-blue-100 rounded-lg" style={{ gap: "10px", padding: "12px" }}>
+                                                    <div className="bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0" style={{ width: "20px", height: "20px", marginTop: "1px" }}>i</div>
                                                     <div>
-                                                        <p className="text-sm font-semibold text-phoenix-text" style={{marginBottom:"4px"}}>Your dedicated address</p>
+                                                        <p className="text-sm font-semibold text-phoenix-text" style={{ marginBottom: "4px" }}>Your dedicated address</p>
                                                         <p className="text-xs text-gray-600">
-                                                            Choose a subdomain (e.g. <strong>acme</strong>) + one of Phoenix's domains (e.g. <strong>speak-up.link</strong>) → <strong>https://acme.speak-up.link</strong>
+                                                            Compose the unique application's address to your Phoenix Whistleblowing Application. Choose your preferred subdomain, usually your organisation's name (e.g. <strong>acme</strong>) and select one of Phoenix's domain (e.g. <strong>speak-up.link</strong>). Your dedicated website's address will be: <strong>https://acme.speak-up.link</strong>
                                                         </p>
-                                                        <p className="text-xs text-phoenix-orange font-medium" style={{marginTop:"4px"}}>Cannot be changed after checkout.</p>
+                                                        <p className="text-xs text-phoenix-orange font-medium" style={{ marginTop: "4px" }}>Be warned that after the checkout, you will no longer be able to change the address.</p>
                                                     </div>
                                                 </div>
-                                                <div className="flex" style={{gap:"12px"}}>
+                                                <div className="flex" style={{ gap: "12px" }}>
                                                     <div className="flex-1">
-                                                        <label className={labelClass}>Subdomain <span className="text-phoenix-orange">*</span></label>
+                                                        <label className={labelClass}>Enter your subdomain <span className="text-phoenix-orange">*</span></label>
                                                         <input type="text" name="subdomain" value={form.subdomain} onChange={handleChange} placeholder="E.g. acme" className={inputClass} />
                                                         {errors.subdomain && <p className="text-xs text-red-500 mt-1">{errors.subdomain}</p>}
                                                     </div>
                                                     <div className="flex-1">
-                                                        <label className={labelClass}>Phoenix domain <span className="text-phoenix-orange">*</span></label>
+                                                        <label className={labelClass}>Select one of Phoenix's domain <span className="text-phoenix-orange">*</span></label>
                                                         <select name="phoenixDomain" value={form.phoenixDomain} onChange={handleChange} className={inputClass}>
                                                             {PHOENIX_DOMAINS.map((d) => <option key={d} value={d}>{d}</option>)}
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <p className="text-xs text-gray-400">Allowed: a–z, 0–9, hyphen (-), underscore (_)</p>
+                                                <p className="text-xs text-gray-400">Can contain only alphabetic characters (a-z), numeric characters (0-9), the minus sign (-), and the underscore (_)</p>
                                             </div>
                                         )}
 
                                         {getDedicatedUrl() && (
-                                            <div className="flex items-center border border-phoenix-orange/20 rounded-lg" style={{gap:"10px", padding:"10px 14px", backgroundColor:"rgba(232,67,26,0.04)", marginTop:"8px"}}>
-                                                <div className="rounded-full bg-phoenix-orange flex-shrink-0" style={{width:"8px", height:"8px"}}></div>
+                                            <div className="flex items-center border border-phoenix-orange/20 rounded-lg" style={{ gap: "10px", padding: "10px 14px", backgroundColor: "rgba(232,67,26,0.04)", marginTop: "8px" }}>
+                                                <div className="rounded-full bg-phoenix-orange flex-shrink-0" style={{ width: "8px", height: "8px" }}></div>
                                                 <div>
                                                     <p className="text-xs text-gray-400">Your address will be:</p>
                                                     <p className="text-sm font-semibold text-phoenix-orange">{getDedicatedUrl()}</p>
@@ -370,21 +421,20 @@ function GetStartedInner() {
                                     <hr className="border-gray-100" />
 
                                     {/* Submit */}
-                                    <div className="flex items-center justify-between">
-                                        <p className="text-xs text-gray-400">Redirected to secure checkout.</p>
+                                    <div className="flex items-center justify-end">
                                         <button type="submit" disabled={loading}
                                             className="bg-phoenix-orange text-white rounded-lg font-bold text-sm hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center"
-                                            style={{padding:"10px 24px", gap:"8px"}}
+                                            style={{ padding: "10px 24px", gap: "8px" }}
                                         >
                                             {loading ? (
                                                 <>
-                                                    <svg className="animate-spin" style={{width:"14px", height:"14px"}} fill="none" viewBox="0 0 24 24">
-                                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-                                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+                                                    <svg className="animate-spin" style={{ width: "14px", height: "14px" }} fill="none" viewBox="0 0 24 24">
+                                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
                                                     </svg>
                                                     Processing...
                                                 </>
-                                            ) : "Continue to Checkout →"}
+                                            ) : "Subscribe"}
                                         </button>
                                     </div>
 
@@ -401,7 +451,7 @@ function GetStartedInner() {
 
 export default function GetStartedForm() {
     return (
-        <Suspense fallback={<div style={{minHeight:"100vh", display:"flex", alignItems:"center", justifyContent:"center"}}><p className="text-gray-400 text-sm">Loading...</p></div>}>
+        <Suspense fallback={<div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}><p className="text-gray-400 text-sm">Loading...</p></div>}>
             <GetStartedInner />
         </Suspense>
     );

@@ -107,16 +107,40 @@ function wbssaas_wcs_plan_payment_complete( $subscription )
             // $gravity->form->composite->gid,
         );
         $entries = GFAPI::get_entries( $form_ids, $search_criteria );
-        $entry = $entries[0];
+        $entry = $entries[0] ?? null;
         $log->debug( [__METHOD__, __LINE__], 'Step #3: Get GF Entry created during the checkout =>' );
         $log->debug( [__METHOD__, __LINE__], $entry );
 
-        // Get the current plan
-        foreach( $gravity->form as $plan => $cursor )
-        {
-            if( $cursor->gid == $entry['form_id'] )
+        /**
+         * Headless fallback: if no GF entry found, read from WC order meta
+         * set by the Next.js headless frontend via URL params.
+         * @see snippets/headless-checkout-meta.php
+         */
+        if ( empty( $entry ) ) {
+            $wc_order = wc_get_order( $order_id );
+            if ( $wc_order && $wc_order->get_meta( '_phoenix_source' ) === 'headless' ) {
+                $headless_plan = $wc_order->get_meta( '_phoenix_plan' ) ?: 'basic';
+                $current_plan  = in_array( $headless_plan, [ 'free', 'basic', 'premium' ] ) ? $headless_plan : 'basic';
+                $entry = [
+                    $gravity->form->$current_plan->name             => $wc_order->get_meta( '_phoenix_org' ),
+                    $gravity->form->$current_plan->subdomain_phoenix => $wc_order->get_meta( '_phoenix_sub' ),
+                    $gravity->form->$current_plan->domain_phoenix    => $wc_order->get_meta( '_phoenix_domain' ) ?: 'whistleblowing.direct',
+                    $gravity->form->$current_plan->location          => $wc_order->get_meta( '_phoenix_loc' ),
+                    'form_id'                                        => $gravity->form->$current_plan->gid,
+                ];
+                $log->info( [__METHOD__, __LINE__], 'Step #3 (headless fallback): Built entry from WC order meta, plan => ' . $current_plan );
+                $log->debug( [__METHOD__, __LINE__], $entry );
+            }
+        }
+
+        // Get the current plan (from GF entry form_id — skipped if already set by headless fallback)
+        if ( empty( $current_plan ) ) {
+            foreach( $gravity->form as $plan => $cursor )
             {
-                $current_plan = $plan;
+                if( $cursor->gid == $entry['form_id'] )
+                {
+                    $current_plan = $plan;
+                }
             }
         }
         $log->debug( [__METHOD__, __LINE__], 'Current plan => ' . $current_plan );

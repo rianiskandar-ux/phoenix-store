@@ -30,6 +30,12 @@ body {
   }
 }
 
+.py-4 {
+  padding-block: calc(var(--spacing) * 4);
+  padding: 10px !important;
+  margin-top: 10px !important;
+  font-size: 12px !important;
+}
 
 .compare-pricing {
   padding: 48px 0;
