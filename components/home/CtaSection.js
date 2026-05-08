@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useReveal, revealStyle } from "@/hooks/useReveal";
 
 export default function CtaSection() {
@@ -21,17 +22,14 @@ export default function CtaSection() {
                     overflow: "hidden",
                     ...revealStyle(card.visible, { direction: "up" }),
                 }}>
-                    {/* Subtle geometric background accents */}
-                    <div style={{
-                        position: "absolute", top: "-60px", right: "-60px",
-                        width: "320px", height: "320px", borderRadius: "50%",
-                        background: "rgba(232,67,26,0.06)", pointerEvents: "none",
-                    }} />
-                    <div style={{
-                        position: "absolute", bottom: "-40px", left: "30%",
-                        width: "200px", height: "200px", borderRadius: "50%",
-                        background: "rgba(255,255,255,0.03)", pointerEvents: "none",
-                    }} />
+                    {/* ornamen black and orange — bottom right */}
+                    <div style={{ position: "absolute", bottom: "-10px", right: "220px", pointerEvents: "none", opacity: 0.18, zIndex: 0 }}>
+                        <Image src="/assets/ornamen black and orange.png" alt="" width={100} height={100} style={{ objectFit: "contain" }} />
+                    </div>
+                    {/* line.png — orange lines top right */}
+                    <div style={{ position: "absolute", top: "24px", right: "24px", pointerEvents: "none", opacity: 0.5, zIndex: 0 }}>
+                        <Image src="/assets/line.png" alt="" width={70} height={36} style={{ objectFit: "contain" }} />
+                    </div>
                     {/* Top-left accent line */}
                     <div style={{
                         position: "absolute", top: 0, left: "64px",

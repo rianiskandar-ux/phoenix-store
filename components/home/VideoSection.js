@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { useReveal, revealStyle } from "@/hooks/useReveal";
 
 const YOUTUBE_VIDEO_ID = "placeholder"; // TODO: replace with real YouTube video ID
@@ -26,12 +27,9 @@ export default function VideoSection() {
                 </svg>
             </div>
 
-            {/* Curly arrow pointing down to video */}
-            <div style={{ textAlign: "center", marginBottom: "-4px", position: "relative", zIndex: 1 }}>
-                <svg width="80" height="50" viewBox="0 0 80 50" fill="none">
-                    <path d="M20 8 Q30 8 35 20 Q40 32 50 38 Q56 42 60 40" stroke="#c8a882" strokeWidth="1.8" strokeLinecap="round" fill="none"/>
-                    <path d="M54 35 L60 40 L55 45" stroke="#c8a882" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-                </svg>
+            {/* Arrow asset pointing down to video */}
+            <div style={{ textAlign: "center", marginBottom: "-8px", position: "relative", zIndex: 1, opacity: 0.7 }}>
+                <Image src="/assets/arrow.png" alt="" width={90} height={55} style={{ objectFit: "contain", transform: "rotate(10deg)" }} />
             </div>
 
             <div ref={content.ref} style={{ maxWidth: "860px", margin: "0 auto", padding: "0 32px", textAlign: "center", position: "relative", zIndex: 1, ...revealStyle(content.visible, { direction: "up" }) }}>

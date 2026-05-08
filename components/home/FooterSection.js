@@ -1,17 +1,25 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function FooterSection() {
     return (
         <footer style={{ background: "#f8f9fb", borderTop: "3px solid #e8431a", boxShadow: "0 -8px 32px rgba(0,0,0,0.06)", padding: "60px 60px 40px", position: "relative", overflow: "hidden" }}>
-            {/* Subtle dot grid top-right */}
-            <div style={{
-                position: "absolute", top: 0, right: 0,
-                width: "280px", height: "200px",
-                backgroundImage: "radial-gradient(circle, #d4d4d4 1px, transparent 1px)",
-                backgroundSize: "20px 20px",
-                opacity: 0.5,
-                pointerEvents: "none",
-            }} />
+            {/* ORNAMEN 3 — peach half circle top-right */}
+            <div style={{ position: "absolute", top: "-20px", right: "-20px", pointerEvents: "none", opacity: 0.4 }}>
+                <Image src="/assets/ORNAMEN 3.png" alt="" width={240} height={150} style={{ objectFit: "contain", transform: "rotate(180deg)" }} />
+            </div>
+            {/* line.png — orange lines top-left near brand */}
+            <div style={{ position: "absolute", top: "48px", left: "48px", pointerEvents: "none", opacity: 0.6 }}>
+                <Image src="/assets/line.png" alt="" width={64} height={32} style={{ objectFit: "contain" }} />
+            </div>
+            {/* ornamen black and orange — mid-right subtle */}
+            <div style={{ position: "absolute", top: "50%", right: "-20px", transform: "translateY(-50%)", pointerEvents: "none", opacity: 0.12 }}>
+                <Image src="/assets/ornamen black and orange.png" alt="" width={120} height={120} style={{ objectFit: "contain" }} />
+            </div>
+            {/* ORNAMEN 2 — grey half circle bottom-left, flipped to hug corner */}
+            <div style={{ position: "absolute", bottom: 0, left: 0, pointerEvents: "none", opacity: 0.35 }}>
+                <Image src="/assets/ORNAMEN 2.png" alt="" width={200} height={120} style={{ objectFit: "contain", transform: "rotate(180deg)" }} />
+            </div>
             <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
                 <div style={{ display: "flex", gap: "60px", flexWrap: "wrap", marginBottom: "48px" }}>
                     {/* Brand */}
