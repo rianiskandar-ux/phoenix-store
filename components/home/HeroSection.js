@@ -2,17 +2,22 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
+import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 
 const waveKeyframes = `
-@keyframes puzzleDrop {
-    from { opacity: 0; transform: translateY(-22px) scale(0.88); }
-    65%  { opacity: 1; transform: translateY(3px) scale(1.03); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
-}
 @keyframes mapFadeIn {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+    from { opacity: 0; transform: scale(0.98); }
+    to   { opacity: 1; transform: scale(1); }
+}
+@keyframes floatUp {
+    0%   { transform: translateY(0) scale(1); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.12)); }
+    50%  { transform: translateY(-4px) scale(1.06); filter: drop-shadow(0 8px 16px rgba(232,67,26,0.4)); }
+    100% { transform: translateY(-3px) scale(1.05); filter: drop-shadow(0 6px 12px rgba(232,67,26,0.35)); }
+}
+@keyframes tooltipIn {
+    from { opacity: 0; transform: translateY(4px) scale(0.95); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 `;
 
@@ -151,9 +156,9 @@ export default function HeroSection() {
                         </div>
                     </div>
 
-                    {/* Right: Europe puzzle map */}
+                    {/* Right: interactive world map */}
                     <div style={{ flex: "1", minWidth: "300px", maxWidth: "600px", position: "relative", ...p(-5) }}>
-                        <EuropePuzzle />
+                        <WorldMapInteractive />
                     </div>
                 </div>
             </div>
@@ -161,117 +166,140 @@ export default function HeroSection() {
     );
 }
 
-// European country puzzle pieces
-// ViewBox 0 0 450 520  |  x = (lon + 12) * 10  |  y = (72 - lat) * 14
-// Each piece: id, name, warm wood color, stagger delay, label center, SVG path
-const COUNTRIES = [
-    { id:"norway",   name:"Norway",      color:"#dfc08a", delay:0.1, lx:168, ly:128, path:"M 82,196 L 168,196 L 220,189 L 262,91 L 262,14 L 202,14 L 156,42 L 110,85 Z" },
-    { id:"sweden",   name:"Sweden",      color:"#c8a870", delay:0.3, lx:280, ly:165, path:"M 220,196 L 302,210 L 302,168 L 360,56 L 262,14 L 262,91 Z" },
-    { id:"finland",  name:"Finland",     color:"#b8956e", delay:0.5, lx:372, ly:130, path:"M 302,168 L 402,168 L 428,126 L 410,28 L 380,28 L 360,56 Z" },
-    { id:"denmark",  name:"Denmark",     color:"#e0c898", delay:0.7, lx:208, ly:218, path:"M 196,217 L 220,196 L 238,210 L 236,224 L 212,231 L 196,224 Z" },
-    { id:"uk",       name:"UK",          color:"#d4b880", delay:0.9, lx:89,  ly:258, path:"M 62,308 L 118,285 L 130,280 L 108,238 L 68,196 L 60,224 L 64,273 Z" },
-    { id:"ireland",  name:"Ireland",     color:"#c8a070", delay:1.1, lx:42,  ly:266, path:"M 36,252 L 55,238 L 58,266 L 50,287 L 30,280 Z" },
-    { id:"neth",     name:"Netherlands", color:"#dfc090", delay:1.3, lx:175, ly:277, path:"M 158,280 L 173,266 L 191,259 L 191,280 L 178,294 L 158,287 Z" },
-    { id:"belgium",  name:"Belgium",     color:"#b88c60", delay:1.5, lx:162, ly:304, path:"M 148,301 L 158,287 L 178,294 L 180,308 L 170,315 L 157,315 Z" },
-    { id:"france",   name:"France",      color:"#d4a860", delay:1.7, lx:130, ly:353, path:"M 76,329 L 138,294 L 178,294 L 196,326 L 194,392 L 170,400 L 106,401 L 100,357 Z" },
-    { id:"portugal", name:"Portugal",    color:"#c89060", delay:1.9, lx:43,  ly:446, path:"M 30,418 L 57,418 L 56,474 L 26,474 Z" },
-    { id:"spain",    name:"Spain",       color:"#e0c070", delay:2.1, lx:90,  ly:444, path:"M 32,418 L 106,401 L 153,413 L 122,471 L 64,502 L 26,474 L 57,418 Z" },
-    { id:"germany",  name:"Germany",     color:"#c49062", delay:2.3, lx:226, ly:291, path:"M 178,287 L 214,238 L 265,252 L 265,294 L 250,329 L 220,341 L 194,341 L 178,315 Z" },
-    { id:"swiss",    name:"Switzerland", color:"#a88060", delay:2.5, lx:200, ly:354, path:"M 180,357 L 199,343 L 225,345 L 221,363 L 188,366 Z" },
-    { id:"austria",  name:"Austria",     color:"#d0a868", delay:2.7, lx:268, ly:347, path:"M 221,345 L 250,339 L 290,336 L 285,357 L 250,359 L 221,353 Z" },
-    { id:"italy",    name:"Italy",       color:"#b87840", delay:2.9, lx:228, ly:416, path:"M 194,392 L 255,371 L 270,392 L 282,448 L 270,469 L 255,455 L 244,420 L 220,407 Z" },
-    { id:"czech",    name:"Czech Rep.",  color:"#d8b880", delay:3.1, lx:270, ly:309, path:"M 244,294 L 265,294 L 305,308 L 299,322 L 244,322 Z" },
-    { id:"poland",   name:"Poland",      color:"#c8a060", delay:3.3, lx:300, ly:270, path:"M 265,252 L 305,245 L 345,245 L 355,280 L 339,308 L 299,308 L 265,294 Z" },
-    { id:"hungary",  name:"Hungary",     color:"#b89868", delay:3.5, lx:310, ly:350, path:"M 285,343 L 299,329 L 345,336 L 345,357 L 305,371 L 285,365 Z" },
-    { id:"balkans",  name:"Balkans",     color:"#c0a878", delay:3.7, lx:302, ly:398, path:"M 250,359 L 285,357 L 305,371 L 345,357 L 374,399 L 345,420 L 320,420 L 299,399 L 272,392 L 255,371 Z" },
-    { id:"romania",  name:"Romania",     color:"#dfc8a0", delay:3.9, lx:376, ly:365, path:"M 345,336 L 360,336 L 390,343 L 408,378 L 404,392 L 374,399 L 345,392 L 345,357 Z" },
-    { id:"greece",   name:"Greece",      color:"#d0b080", delay:4.1, lx:350, ly:452, path:"M 320,420 L 345,420 L 380,427 L 390,476 L 340,497 L 326,462 L 325,427 Z" },
-];
+// World TopoJSON from CDN — loaded client-side
+const GEO_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 
-function EuropePuzzle() {
+// ISO numeric → country name mapping for tooltip
+const COUNTRY_NAMES = {
+    "4":"Afghanistan","8":"Albania","12":"Algeria","24":"Angola","32":"Argentina","36":"Australia",
+    "40":"Austria","50":"Bangladesh","56":"Belgium","64":"Bhutan","68":"Bolivia","76":"Brazil",
+    "100":"Bulgaria","116":"Cambodia","120":"Cameroon","124":"Canada","144":"Sri Lanka","152":"Chile",
+    "156":"China","170":"Colombia","180":"DR Congo","188":"Costa Rica","191":"Croatia","192":"Cuba",
+    "203":"Czech Republic","208":"Denmark","218":"Ecuador","818":"Egypt","231":"Ethiopia",
+    "246":"Finland","250":"France","276":"Germany","288":"Ghana","300":"Greece","320":"Guatemala",
+    "332":"Haiti","340":"Honduras","348":"Hungary","356":"India","360":"Indonesia","364":"Iran",
+    "368":"Iraq","372":"Ireland","376":"Israel","380":"Italy","388":"Jamaica","392":"Japan",
+    "400":"Jordan","398":"Kazakhstan","404":"Kenya","408":"North Korea","410":"South Korea",
+    "414":"Kuwait","418":"Laos","422":"Lebanon","430":"Liberia","434":"Libya","484":"Mexico",
+    "504":"Morocco","508":"Mozambique","516":"Namibia","524":"Nepal","528":"Netherlands",
+    "540":"New Caledonia","554":"New Zealand","558":"Nicaragua","566":"Nigeria","578":"Norway",
+    "586":"Pakistan","591":"Panama","600":"Paraguay","604":"Peru","608":"Philippines","616":"Poland",
+    "620":"Portugal","630":"Puerto Rico","642":"Romania","643":"Russia","646":"Rwanda",
+    "682":"Saudi Arabia","686":"Senegal","694":"Sierra Leone","703":"Slovakia","706":"Somalia",
+    "710":"South Africa","724":"Spain","729":"Sudan","752":"Sweden","756":"Switzerland",
+    "760":"Syria","764":"Thailand","768":"Togo","792":"Turkey","800":"Uganda","804":"Ukraine",
+    "784":"United Arab Emirates","826":"United Kingdom","840":"United States","858":"Uruguay",
+    "862":"Venezuela","704":"Vietnam","887":"Yemen","894":"Zambia","716":"Zimbabwe",
+};
+
+function WorldMapInteractive() {
     const [hovered, setHovered] = useState(null);
+    const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
+    const wrapRef = useRef(null);
+
+    const handleMouseMove = useCallback((e) => {
+        if (!wrapRef.current) return;
+        const rect = wrapRef.current.getBoundingClientRect();
+        setTooltipPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+    }, []);
 
     return (
-        <div style={{ position: "relative", width: "100%", animation: "mapFadeIn 0.8s ease forwards" }}>
-            <div style={{
-                background: "#f5f0e8",
-                border: "1px solid #e8e0d0",
+        <div
+            ref={wrapRef}
+            onMouseMove={handleMouseMove}
+            style={{
+                position: "relative",
+                width: "100%",
+                animation: "mapFadeIn 1s ease forwards",
+                background: "#f8f9fb",
+                border: "1px solid #f0f0f0",
                 borderRadius: "20px",
-                padding: "20px 16px 16px",
-                boxShadow: "0 12px 50px rgba(0,0,0,0.09)",
+                boxShadow: "0 8px 40px rgba(0,0,0,0.06)",
                 overflow: "hidden",
-            }}>
-                {/* Top hint */}
-                <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "10px", paddingLeft: "4px" }}>
-                    <div style={{ width: "5px", height: "5px", borderRadius: "50%", background: "#e8431a" }} />
-                    <span style={{ fontSize: "0.62rem", fontWeight: 700, color: "#e8431a", letterSpacing: "0.08em" }}>
-                        {hovered
-                            ? COUNTRIES.find(c => c.id === hovered)?.name.toUpperCase()
-                            : "HOVER A COUNTRY · EU COVERAGE"}
-                    </span>
-                </div>
-
-                <svg viewBox="0 0 450 520" style={{ width: "100%", height: "auto", display: "block" }}>
-                    <defs>
-                        {/* Normal piece shadow */}
-                        <filter id="ps" x="-10%" y="-10%" width="120%" height="120%">
-                            <feDropShadow dx="1" dy="2.5" stdDeviation="2" floodOpacity="0.18" />
-                        </filter>
-                        {/* Hover piece shadow — orange glow */}
-                        <filter id="ph" x="-20%" y="-20%" width="140%" height="140%">
-                            <feDropShadow dx="0" dy="4" stdDeviation="5" floodColor="#e8431a" floodOpacity="0.45" />
-                        </filter>
-                    </defs>
-
-                    {COUNTRIES.map((c) => {
-                        const isHovered = hovered === c.id;
-                        return (
-                            <g
-                                key={c.id}
-                                filter={`url(#${isHovered ? "ph" : "ps"})`}
-                                onMouseEnter={() => setHovered(c.id)}
-                                onMouseLeave={() => setHovered(null)}
-                                style={{
-                                    cursor: "pointer",
-                                    transformBox: "fill-box",
-                                    transformOrigin: "center",
-                                    animation: `puzzleDrop 0.55s ${c.delay}s cubic-bezier(0.34,1.56,0.64,1) both`,
-                                    transform: isHovered ? "translateY(-5px)" : undefined,
-                                    transition: "transform 0.18s ease",
-                                }}
-                            >
-                                {/* Piece body */}
-                                <path
-                                    d={c.path}
-                                    fill={isHovered ? "#e8431a" : c.color}
-                                    stroke="#f5f0e8"
-                                    strokeWidth="1.8"
-                                    strokeLinejoin="round"
-                                    style={{ transition: "fill 0.15s ease" }}
-                                />
-                                {/* Inner edge highlight (3D top-left bevel) */}
-                                <path
-                                    d={c.path}
-                                    fill="none"
-                                    stroke={isHovered ? "rgba(255,255,255,0.3)" : "rgba(255,255,255,0.55)"}
-                                    strokeWidth="0.8"
-                                    strokeLinejoin="round"
-                                    style={{ pointerEvents: "none", transition: "stroke 0.15s" }}
-                                />
-                                {/* Country label */}
-                                <text
-                                    x={c.lx} y={c.ly}
-                                    textAnchor="middle"
-                                    fill={isHovered ? "#fff" : "rgba(60,35,10,0.55)"}
-                                    fontSize="7"
-                                    fontWeight="700"
-                                    style={{ pointerEvents: "none", transition: "fill 0.15s", userSelect: "none" }}
-                                >{c.name}</text>
-                            </g>
-                        );
-                    })}
-                </svg>
+                padding: "12px 8px 8px",
+            }}
+        >
+            {/* Header bar */}
+            <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "4px", paddingLeft: "8px" }}>
+                <div style={{ width: "5px", height: "5px", borderRadius: "50%", background: "#e8431a" }} />
+                <span style={{ fontSize: "0.62rem", fontWeight: 700, color: "#e8431a", letterSpacing: "0.08em" }}>
+                    GLOBAL REACH · 50+ LANGUAGES
+                </span>
             </div>
+
+            <ComposableMap
+                projectionConfig={{ scale: 120, center: [10, 20] }}
+                style={{ width: "100%", height: "auto" }}
+            >
+                <Geographies geography={GEO_URL}>
+                    {({ geographies }) =>
+                        geographies.map((geo) => {
+                            const id = geo.id;
+                            return (
+                                <Geography
+                                    key={geo.rsmKey}
+                                    geography={geo}
+                                    onMouseEnter={() => setHovered(id)}
+                                    onMouseLeave={() => setHovered(null)}
+                                    style={{
+                                        default: {
+                                            fill: "#D6D9E0",
+                                            stroke: "#fff",
+                                            strokeWidth: 0.5,
+                                            outline: "none",
+                                            transition: "fill 0.18s ease, transform 0.22s cubic-bezier(0.34,1.56,0.64,1), filter 0.22s ease",
+                                            transformBox: "fill-box",
+                                            transformOrigin: "center",
+                                        },
+                                        hover: {
+                                            fill: "#e8431a",
+                                            stroke: "#fff",
+                                            strokeWidth: 0.6,
+                                            outline: "none",
+                                            transform: "scale(1.06) translateY(-2px)",
+                                            filter: "drop-shadow(0 4px 10px rgba(232,67,26,0.5))",
+                                            transformBox: "fill-box",
+                                            transformOrigin: "center",
+                                            cursor: "pointer",
+                                            zIndex: 10,
+                                        },
+                                        pressed: {
+                                            fill: "#c0361a",
+                                            outline: "none",
+                                            transformBox: "fill-box",
+                                            transformOrigin: "center",
+                                        },
+                                    }}
+                                />
+                            );
+                        })
+                    }
+                </Geographies>
+            </ComposableMap>
+
+            {/* Floating tooltip */}
+            {hovered && COUNTRY_NAMES[hovered] && (
+                <div style={{
+                    position: "absolute",
+                    left: tooltipPos.x + 12,
+                    top: tooltipPos.y - 36,
+                    background: "#fff",
+                    border: "1px solid #f0f0f0",
+                    borderRadius: "8px",
+                    padding: "5px 10px",
+                    fontSize: "0.72rem",
+                    fontWeight: 700,
+                    color: "#111",
+                    boxShadow: "0 4px 16px rgba(0,0,0,0.12)",
+                    pointerEvents: "none",
+                    whiteSpace: "nowrap",
+                    animation: "tooltipIn 0.15s ease forwards",
+                    zIndex: 20,
+                }}>
+                    <span style={{ color: "#e8431a", marginRight: "4px" }}>●</span>
+                    {COUNTRY_NAMES[hovered]}
+                </div>
+            )}
         </div>
     );
 }
