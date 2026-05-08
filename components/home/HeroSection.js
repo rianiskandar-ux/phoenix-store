@@ -3,7 +3,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useCallback, useRef } from "react";
-import { ComposableMap, Geographies, Geography } from "react-simple-maps";
+import { ComposableMap, Geographies, Geography, ZoomableGroup } from "react-simple-maps";
+import { geoCentroid, geoBounds } from "d3-geo";
 
 const waveKeyframes = `
 @keyframes mapFadeIn {
@@ -37,13 +38,11 @@ export default function HeroSection() {
 
     const handleMouseMove = useCallback((e) => {
         const rect = e.currentTarget.getBoundingClientRect();
-        // Normalize -1 to 1
         const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
         const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
         setMouse({ x, y });
     }, []);
 
-    // Helper: compute parallax translate for a layer
     const p = (strength) => ({
         transform: `translate(${mouse.x * strength}px, ${mouse.y * strength}px)`,
         transition: "transform 0.12s ease-out",
@@ -66,19 +65,19 @@ export default function HeroSection() {
                 background: "radial-gradient(circle, rgba(232,67,26,0.06) 0%, transparent 65%)",
                 pointerEvents: "none",
             }} />
-            {/* line.png — near title, rotated for energy — slow layer */}
-            <div style={{ position: "absolute", top: "18%", left: "3%", pointerEvents: "none", opacity: 0.45, ...p(6), transform: `rotate(-15deg) translate(${mouse.x * 6}px, ${mouse.y * 6}px)` }}>
+            {/* line.png */}
+            <div style={{ position: "absolute", top: "18%", left: "3%", pointerEvents: "none", opacity: 0.45, transform: `rotate(-15deg) translate(${mouse.x * 6}px, ${mouse.y * 6}px)` }}>
                 <Image src="/assets/line.png" alt="" width={72} height={36} style={{ objectFit: "contain" }} />
             </div>
-            {/* ornamen black and orange — bottom left — medium layer */}
-            <div style={{ position: "absolute", bottom: "60px", left: "-28px", pointerEvents: "none", opacity: 0.15, ...p(10), transform: `rotate(12deg) scale(1.1) translate(${mouse.x * 10}px, ${mouse.y * 10}px)` }}>
+            {/* ornamen black and orange */}
+            <div style={{ position: "absolute", bottom: "60px", left: "-28px", pointerEvents: "none", opacity: 0.15, transform: `rotate(12deg) scale(1.1) translate(${mouse.x * 10}px, ${mouse.y * 10}px)` }}>
                 <Image src="/assets/ornamen black and orange.png" alt="" width={110} height={110} style={{ objectFit: "contain" }} />
             </div>
-            {/* ORNAMEN 3 peach — top left — slowest, largest */}
+            {/* ORNAMEN 3 peach */}
             <div style={{ position: "absolute", top: "-60px", left: "-60px", pointerEvents: "none", opacity: 0.2, ...p(4) }}>
                 <Image src="/assets/ORNAMEN 3.png" alt="" width={340} height={210} style={{ objectFit: "contain" }} />
             </div>
-            {/* dot grid mid-left subtle — static */}
+            {/* dot grid */}
             <div style={{
                 position: "absolute", top: "30%", left: "0",
                 width: "180px", height: "240px",
@@ -93,15 +92,15 @@ export default function HeroSection() {
                 </svg>
             </div>
 
-            <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 32px" }}>
+            <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 32px" }}>
                 <div style={{
                     display: "flex", justifyContent: "space-between",
-                    alignItems: "center", gap: "60px", flexWrap: "wrap",
+                    alignItems: "center", gap: "48px", flexWrap: "wrap",
                     minHeight: "calc(100vh - 60px)",
                     paddingTop: "60px", paddingBottom: "80px",
                 }}>
                     {/* Left */}
-                    <div style={{ maxWidth: "480px", zIndex: 10, position: "relative" }}>
+                    <div style={{ maxWidth: "420px", zIndex: 10, position: "relative", flexShrink: 0 }}>
                         {/* Badge */}
                         <div style={{
                             display: "inline-flex", alignItems: "center", gap: "8px",
@@ -167,8 +166,8 @@ export default function HeroSection() {
                         </div>
                     </div>
 
-                    {/* Right: interactive world map */}
-                    <div style={{ flex: "1", minWidth: "300px", maxWidth: "600px", position: "relative", ...p(-5) }}>
+                    {/* Right: interactive world map — takes remaining space */}
+                    <div style={{ flex: "1", minWidth: "340px", position: "relative", ...p(-5) }}>
                         <WorldMapInteractive />
                     </div>
                 </div>
@@ -180,7 +179,7 @@ export default function HeroSection() {
 // World TopoJSON from CDN — loaded client-side
 const GEO_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 
-// ISO numeric → country name mapping for tooltip
+// ISO numeric → country name
 const COUNTRY_NAMES = {
     "4":"Afghanistan","8":"Albania","12":"Algeria","24":"Angola","32":"Argentina","36":"Australia",
     "40":"Austria","50":"Bangladesh","56":"Belgium","64":"Bhutan","68":"Bolivia","76":"Brazil",
@@ -203,15 +202,52 @@ const COUNTRY_NAMES = {
     "862":"Venezuela","704":"Vietnam","887":"Yemen","894":"Zambia","716":"Zimbabwe",
 };
 
+// Compute zoom level based on bounding-box area — smaller country → higher zoom
+function getZoomForGeo(geo) {
+    try {
+        const [[x0, y0], [x1, y1]] = geoBounds(geo);
+        const area = (x1 - x0) * (y1 - y0);
+        if (area < 1)   return 12;
+        if (area < 5)   return 8;
+        if (area < 20)  return 6;
+        if (area < 80)  return 4;
+        if (area < 300) return 2.5;
+        return 1.6; // Russia, Canada, etc.
+    } catch {
+        return 4;
+    }
+}
+
 function WorldMapInteractive() {
     const [hovered, setHovered] = useState(null);
+    const [selectedId, setSelectedId] = useState(null);
     const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
+    const [mapCenter, setMapCenter] = useState([10, 20]);
+    const [mapZoom, setMapZoom] = useState(1);
     const wrapRef = useRef(null);
 
     const handleMouseMove = useCallback((e) => {
         if (!wrapRef.current) return;
         const rect = wrapRef.current.getBoundingClientRect();
         setTooltipPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+    }, []);
+
+    const handleCountryClick = useCallback((geo) => {
+        try {
+            const centroid = geoCentroid(geo);
+            const targetZoom = getZoomForGeo(geo);
+            setMapCenter(centroid);
+            setMapZoom(targetZoom);
+            setSelectedId(geo.id);
+        } catch {
+            // ignore unprojectable geographies
+        }
+    }, []);
+
+    const handleReset = useCallback(() => {
+        setMapCenter([10, 20]);
+        setMapZoom(1);
+        setSelectedId(null);
     }, []);
 
     return (
@@ -227,55 +263,97 @@ function WorldMapInteractive() {
                 borderRadius: "20px",
                 boxShadow: "0 8px 40px rgba(0,0,0,0.06)",
                 overflow: "hidden",
-                padding: "12px 8px 8px",
+                userSelect: "none",
             }}
         >
             {/* Header bar */}
-            <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "4px", paddingLeft: "8px" }}>
-                <div style={{ width: "5px", height: "5px", borderRadius: "50%", background: "#e8431a" }} />
-                <span style={{ fontSize: "0.62rem", fontWeight: 700, color: "#e8431a", letterSpacing: "0.08em" }}>
-                    GLOBAL REACH · 50+ LANGUAGES
-                </span>
+            <div style={{
+                display: "flex", alignItems: "center", justifyContent: "space-between",
+                padding: "10px 14px 6px",
+            }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                    <div style={{ width: "5px", height: "5px", borderRadius: "50%", background: "#e8431a" }} />
+                    <span style={{ fontSize: "0.62rem", fontWeight: 700, color: "#e8431a", letterSpacing: "0.08em" }}>
+                        GLOBAL REACH · 50+ LANGUAGES
+                    </span>
+                </div>
+                {selectedId && (
+                    <button
+                        onClick={handleReset}
+                        style={{
+                            fontSize: "0.6rem", color: "#888", background: "none",
+                            border: "1px solid #e0e0e0", borderRadius: "4px",
+                            padding: "2px 8px", cursor: "pointer", letterSpacing: "0.04em",
+                        }}
+                    >
+                        ← Reset
+                    </button>
+                )}
             </div>
 
+            {/* Hint */}
+            {!selectedId && (
+                <div style={{ textAlign: "center", paddingBottom: "2px" }}>
+                    <span style={{ fontSize: "0.58rem", color: "#bbb", letterSpacing: "0.04em" }}>Click a country to zoom · Drag to pan</span>
+                </div>
+            )}
+            {selectedId && COUNTRY_NAMES[selectedId] && (
+                <div style={{ textAlign: "center", paddingBottom: "2px" }}>
+                    <span style={{ fontSize: "0.65rem", color: "#e8431a", fontWeight: 700, letterSpacing: "0.04em" }}>
+                        {COUNTRY_NAMES[selectedId]}
+                    </span>
+                </div>
+            )}
+
             <ComposableMap
-                projectionConfig={{ scale: 120, center: [10, 20] }}
+                projectionConfig={{ scale: 155, center: [10, 20] }}
                 style={{ width: "100%", height: "auto" }}
             >
-                <Geographies geography={GEO_URL}>
-                    {({ geographies }) =>
-                        geographies.map((geo) => {
-                            const id = geo.id;
-                            return (
-                                <Geography
-                                    key={geo.rsmKey}
-                                    geography={geo}
-                                    className="rsm-geo"
-                                    onMouseEnter={() => setHovered(id)}
-                                    onMouseLeave={() => setHovered(null)}
-                                    style={{
-                                        default: {
-                                            fill: "#D6D9E0",
-                                            stroke: "#fff",
-                                            strokeWidth: 0.5,
-                                            outline: "none",
-                                        },
-                                        hover: {
-                                            fill: "#e8431a",
-                                            stroke: "#fff",
-                                            strokeWidth: 0.6,
-                                            outline: "none",
-                                        },
-                                        pressed: {
-                                            fill: "#c0361a",
-                                            outline: "none",
-                                        },
-                                    }}
-                                />
-                            );
-                        })
-                    }
-                </Geographies>
+                <ZoomableGroup
+                    zoom={mapZoom}
+                    center={mapCenter}
+                    onMoveEnd={({ coordinates, zoom }) => {
+                        setMapCenter(coordinates);
+                        setMapZoom(zoom);
+                    }}
+                >
+                    <Geographies geography={GEO_URL}>
+                        {({ geographies }) =>
+                            geographies.map((geo) => {
+                                const id = geo.id;
+                                const isSelected = selectedId === id;
+                                return (
+                                    <Geography
+                                        key={geo.rsmKey}
+                                        geography={geo}
+                                        className="rsm-geo"
+                                        onMouseEnter={() => setHovered(id)}
+                                        onMouseLeave={() => setHovered(null)}
+                                        onClick={() => handleCountryClick(geo)}
+                                        style={{
+                                            default: {
+                                                fill: isSelected ? "#c0361a" : "#D6D9E0",
+                                                stroke: "#fff",
+                                                strokeWidth: 0.5,
+                                                outline: "none",
+                                            },
+                                            hover: {
+                                                fill: "#e8431a",
+                                                stroke: "#fff",
+                                                strokeWidth: 0.6,
+                                                outline: "none",
+                                            },
+                                            pressed: {
+                                                fill: "#a02d15",
+                                                outline: "none",
+                                            },
+                                        }}
+                                    />
+                                );
+                            })
+                        }
+                    </Geographies>
+                </ZoomableGroup>
             </ComposableMap>
 
             {/* Floating tooltip */}
