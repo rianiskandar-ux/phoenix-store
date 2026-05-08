@@ -10,14 +10,25 @@ const waveKeyframes = `
     from { opacity: 0; transform: scale(0.98); }
     to   { opacity: 1; transform: scale(1); }
 }
-@keyframes floatUp {
-    0%   { transform: translateY(0) scale(1); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.12)); }
-    50%  { transform: translateY(-4px) scale(1.06); filter: drop-shadow(0 8px 16px rgba(232,67,26,0.4)); }
-    100% { transform: translateY(-3px) scale(1.05); filter: drop-shadow(0 6px 12px rgba(232,67,26,0.35)); }
-}
 @keyframes tooltipIn {
     from { opacity: 0; transform: translateY(4px) scale(0.95); }
     to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes geoFloat {
+    0%   { transform: scale(1.05) translateY(-2px); }
+    35%  { transform: scale(1.08) translateY(-6px); }
+    70%  { transform: scale(1.06) translateY(-4px); }
+    100% { transform: scale(1.05) translateY(-2px); }
+}
+.rsm-geo {
+    transform-box: fill-box;
+    transform-origin: center;
+    cursor: pointer;
+    transition: fill 0.18s ease, filter 0.22s ease;
+}
+.rsm-geo:hover {
+    animation: geoFloat 1.8s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+    filter: drop-shadow(0 6px 16px rgba(232, 67, 26, 0.55));
 }
 `;
 
@@ -239,6 +250,7 @@ function WorldMapInteractive() {
                                 <Geography
                                     key={geo.rsmKey}
                                     geography={geo}
+                                    className="rsm-geo"
                                     onMouseEnter={() => setHovered(id)}
                                     onMouseLeave={() => setHovered(null)}
                                     style={{
@@ -247,27 +259,16 @@ function WorldMapInteractive() {
                                             stroke: "#fff",
                                             strokeWidth: 0.5,
                                             outline: "none",
-                                            transition: "fill 0.18s ease, transform 0.22s cubic-bezier(0.34,1.56,0.64,1), filter 0.22s ease",
-                                            transformBox: "fill-box",
-                                            transformOrigin: "center",
                                         },
                                         hover: {
                                             fill: "#e8431a",
                                             stroke: "#fff",
                                             strokeWidth: 0.6,
                                             outline: "none",
-                                            transform: "scale(1.06) translateY(-2px)",
-                                            filter: "drop-shadow(0 4px 10px rgba(232,67,26,0.5))",
-                                            transformBox: "fill-box",
-                                            transformOrigin: "center",
-                                            cursor: "pointer",
-                                            zIndex: 10,
                                         },
                                         pressed: {
                                             fill: "#c0361a",
                                             outline: "none",
-                                            transformBox: "fill-box",
-                                            transformOrigin: "center",
                                         },
                                     }}
                                 />
