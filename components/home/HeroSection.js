@@ -3,11 +3,53 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { ComposableMap, Geographies, Geography, ZoomableGroup, Marker } from "react-simple-maps";
 import { geoCentroid, geoBounds } from "d3-geo";
 
 const waveKeyframes = `
+@media (max-width: 767px) {
+    .hero-layout {
+        flex-direction: column !important;
+        min-height: auto !important;
+        padding-top: 32px !important;
+        padding-bottom: 56px !important;
+        gap: 32px !important;
+    }
+    .hero-left {
+        max-width: 100% !important;
+        flex-shrink: unset !important;
+    }
+    .hero-right-map {
+        flex: none !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        transform: none !important;
+    }
+    .hero-stats {
+        gap: 20px !important;
+        margin-top: 32px !important;
+        flex-wrap: wrap !important;
+    }
+    .hero-wave-strip {
+        display: none !important;
+    }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+    .hero-layout {
+        min-height: auto !important;
+        padding-top: 48px !important;
+        padding-bottom: 64px !important;
+        gap: 32px !important;
+    }
+    .hero-left {
+        max-width: 340px !important;
+    }
+    .hero-right-map {
+        min-width: 0 !important;
+    }
+}
+
 @keyframes mapFadeIn {
     from { opacity: 0; transform: scale(0.98); }
     to   { opacity: 1; transform: scale(1); }
@@ -30,7 +72,7 @@ const waveKeyframes = `
 }
 .rsm-geo:hover {
     animation: geoFloat 1.8s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
-    filter: drop-shadow(0 5px 12px rgba(80, 130, 180, 0.5));
+    filter: drop-shadow(0 5px 14px rgba(232,67,26,0.35));
 }
 @keyframes waveEntrance1 {
     0%   { transform: translateX(18%) translateY(12%) scale(0.88); opacity: 0; }
@@ -60,19 +102,45 @@ const waveKeyframes = `
     animation: geoFloat 1.8s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
     filter: drop-shadow(0 7px 16px rgba(0,0,0,0.42)) brightness(1.08);
 }
+.rsm-puzzle:focus-visible {
+    outline: none;
+    filter: drop-shadow(0 0 3px #e8431a) drop-shadow(0 0 7px rgba(232,67,26,0.45));
+}
+@media (prefers-reduced-motion: reduce) {
+    .rsm-puzzle:hover { animation: none; }
+    .rsm-geo:hover    { animation: none; }
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
 `;
 
 export default function HeroSection() {
     const [mouse, setMouse] = useState({ x: 0, y: 0 });
+    const [isMobile, setIsMobile] = useState(false);
+    const rafParallax = useRef(null);
 
-    const handleMouseMove = useCallback((e) => {
-        const rect = e.currentTarget.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
-        const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
-        setMouse({ x, y });
+    useEffect(() => {
+        const check = () => setIsMobile(window.innerWidth < 768);
+        check();
+        window.addEventListener("resize", check);
+        return () => window.removeEventListener("resize", check);
     }, []);
 
-    const p = (strength) => ({
+    const handleMouseMove = useCallback((e) => {
+        if (rafParallax.current) return;
+        rafParallax.current = requestAnimationFrame(() => {
+            rafParallax.current = null;
+            const rect = e.currentTarget.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+            const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+            setMouse({ x, y });
+        });
+    }, []);
+
+    const p = (strength) => isMobile ? {} : ({
         transform: `translate(${mouse.x * strength}px, ${mouse.y * strength}px)`,
         transition: "transform 0.12s ease-out",
     });
@@ -88,7 +156,7 @@ export default function HeroSection() {
             <style>{waveKeyframes}</style>
 
             {/* Wave 2-layer container — strict right strip */}
-            <div style={{
+            <div className="hero-wave-strip" style={{
                 position: "absolute", top: 0, right: 0, bottom: 0,
                 width: "18%",
                 overflow: "hidden",
@@ -160,14 +228,14 @@ export default function HeroSection() {
             </div>
 
             <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 32px" }}>
-                <div style={{
+                <div className="hero-layout" style={{
                     display: "flex", justifyContent: "space-between",
                     alignItems: "center", gap: "48px", flexWrap: "wrap",
                     minHeight: "calc(100vh - 60px)",
                     paddingTop: "60px", paddingBottom: "80px",
                 }}>
                     {/* Left */}
-                    <div style={{ maxWidth: "420px", zIndex: 10, position: "relative", flexShrink: 0 }}>
+                    <div className="hero-left" style={{ maxWidth: "420px", zIndex: 10, position: "relative", flexShrink: 0 }}>
                         {/* Badge */}
                         <div style={{
                             display: "inline-flex", alignItems: "center", gap: "8px",
@@ -175,12 +243,12 @@ export default function HeroSection() {
                             borderRadius: "100px", padding: "5px 14px", marginBottom: "24px",
                         }}>
                             <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#e8431a", display: "inline-block" }} />
-                            <span style={{ color: "#e8431a", fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.07em" }}>No credit card required. No hidden fees.</span>
+                            <span style={{ color: "#e8431a", fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.07em" }}>WHISTLEBLOWING PLATFORM</span>
                         </div>
 
                         <h1 style={{
                             fontSize: "clamp(3rem, 5.5vw, 5rem)", fontWeight: 900,
-                            color: "#e8431a", lineHeight: 1, margin: "0 0 4px",
+                            color: "#111111", lineHeight: 1, margin: "0 0 4px",
                             letterSpacing: "-0.02em", textTransform: "uppercase",
                         }}>
                             PHOENIX
@@ -191,7 +259,7 @@ export default function HeroSection() {
                         }}>
                             Whistleblowing Software
                         </h2>
-                        <p style={{ color: "#777", fontSize: "1rem", margin: "0 0 36px", lineHeight: 1.7 }}>
+                        <p style={{ color: "#888", fontSize: "1rem", margin: "0 0 36px", lineHeight: 1.7 }}>
                             Inspiring Integrity, Guiding Growth
                         </p>
 
@@ -208,18 +276,21 @@ export default function HeroSection() {
                             </Link>
                             <Link href="/features" style={{
                                 display: "inline-block", padding: "15px 32px",
-                                background: "transparent", color: "#333",
+                                background: "transparent", color: "#444",
                                 fontWeight: 600, fontSize: "0.875rem",
                                 borderRadius: "8px", textDecoration: "none",
-                                border: "1.5px solid #e8e8e8",
+                                border: "1.5px solid rgba(0,0,0,0.12)",
                                 letterSpacing: "0.02em",
                             }}>
                                 View Features
                             </Link>
                         </div>
+                        <p style={{ fontSize: "0.75rem", color: "#aaa", margin: "14px 0 0", letterSpacing: "0.02em" }}>
+                            No credit card required · No hidden fees.
+                        </p>
 
                         {/* Stats */}
-                        <div style={{ display: "flex", gap: "32px", marginTop: "48px", paddingTop: "28px", borderTop: "1px solid #f0f0f0" }}>
+                        <div className="hero-stats" style={{ display: "flex", gap: "32px", marginTop: "48px", paddingTop: "28px", borderTop: "1px solid #f0f0f0" }}>
                             {[
                                 { val: "50+", label: "Languages" },
                                 { val: "99.9%", label: "Uptime SLA" },
@@ -234,7 +305,7 @@ export default function HeroSection() {
                     </div>
 
                     {/* Right: interactive world map — large, uncapped */}
-                    <div style={{ flex: "1 1 520px", minWidth: "380px", position: "relative", ...p(-5) }}>
+                    <div className="hero-right-map" style={{ flex: "1 1 520px", position: "relative", ...p(-5) }}>
                         <MapWithPulse />
                     </div>
                 </div>
@@ -243,8 +314,7 @@ export default function HeroSection() {
     );
 }
 
-// World TopoJSON from CDN — loaded client-side
-const GEO_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
+const GEO_URL = "/countries-110m.json";
 
 // ISO numeric → country name (full world atlas coverage)
 const COUNTRY_NAMES = {
@@ -385,24 +455,35 @@ function WorldMapInteractive() {
     const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
     const [mapCenter, setMapCenter] = useState(EUROPE_CENTER);
     const [mapZoom, setMapZoom] = useState(1);
+    const [announcement, setAnnouncement] = useState('');
     const wrapRef = useRef(null);
+    const rafTooltip = useRef(null);
 
     const handleMouseMove = useCallback((e) => {
-        if (!wrapRef.current) return;
-        const rect = wrapRef.current.getBoundingClientRect();
-        setTooltipPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+        if (rafTooltip.current) return;
+        const cx = e.clientX;
+        const cy = e.clientY;
+        rafTooltip.current = requestAnimationFrame(() => {
+            rafTooltip.current = null;
+            if (!wrapRef.current) return;
+            const rect = wrapRef.current.getBoundingClientRect();
+            setTooltipPos({ x: cx - rect.left, y: cy - rect.top });
+        });
     }, []);
 
     const handleCountryClick = useCallback((geo) => {
         try {
             const targetZoom = getZoomForGeo(geo);
             setSelectedId(geo.id);
+            const countryName = COUNTRY_DATA[geo.id]?.name || COUNTRY_NAMES[geo.id] || 'country';
             if (targetZoom !== null) {
                 const centroid = geoCentroid(geo);
                 setMapCenter(centroid);
                 setMapZoom(targetZoom);
+                setAnnouncement(`Zoomed to ${countryName}`);
+            } else {
+                setAnnouncement(`Selected ${countryName}`);
             }
-            // null zoom → just highlight, no pan/zoom (e.g. Russia)
         } catch {
             setSelectedId(geo.id);
         }
@@ -412,11 +493,14 @@ function WorldMapInteractive() {
         setMapCenter(EUROPE_CENTER);
         setMapZoom(1);
         setSelectedId(null);
+        setAnnouncement('Map reset to Europe view');
     }, []);
 
     return (
         <div
             ref={wrapRef}
+            role="region"
+            aria-label="Interactive map of Phoenix coverage across 30 European countries. Use Tab to navigate countries, Enter or Space to zoom."
             onMouseMove={handleMouseMove}
             style={{
                 position: "relative",
@@ -427,6 +511,18 @@ function WorldMapInteractive() {
                 userSelect: "none",
             }}
         >
+            {/* Screen reader announcements */}
+            <div
+                aria-live="polite"
+                aria-atomic="true"
+                style={{
+                    position: "absolute", width: "1px", height: "1px",
+                    padding: 0, margin: "-1px", overflow: "hidden",
+                    clip: "rect(0,0,0,0)", whiteSpace: "nowrap", border: 0,
+                }}
+            >
+                {announcement}
+            </div>
             {/* Global Reach label — centered, tight above map */}
             <div style={{ textAlign: "center", marginBottom: "4px" }}>
                 <span style={{
@@ -510,9 +606,19 @@ function WorldMapInteractive() {
                                         key={geo.rsmKey}
                                         geography={geo}
                                         className="rsm-puzzle"
+                                        tabIndex={0}
+                                        role="button"
+                                        aria-label={`${data.name}${isSelected ? ', selected' : ''}`}
+                                        aria-pressed={isSelected}
                                         onMouseEnter={() => setHovered(id)}
                                         onMouseLeave={() => setHovered(null)}
                                         onClick={() => handleCountryClick(geo)}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter' || e.key === ' ') {
+                                                e.preventDefault();
+                                                handleCountryClick(geo);
+                                            }
+                                        }}
                                         style={{
                                             default: {
                                                 fill: isSelected ? `url(#grad-${id})` : `url(#hatch-${id})`,
@@ -549,7 +655,7 @@ function WorldMapInteractive() {
                                     fontSize: "3.6px",
                                     fontWeight: 800,
                                     fill: "#111",
-                                    fontFamily: "Arial, sans-serif",
+                                    fontFamily: "Inter, Arial, sans-serif",
                                     pointerEvents: "none",
                                     letterSpacing: "0.02em",
                                     paintOrder: "stroke",
@@ -565,7 +671,7 @@ function WorldMapInteractive() {
                             <circle r={5.2} fill="white" stroke="#ccc" strokeWidth={0.3} />
                             {/* Actual flag image from flagcdn */}
                             <image
-                                href={`https://flagcdn.com/w20/${data.iso2}.png`}
+                                href={`/flags/${data.iso2}.png`}
                                 x={-5.2} y={-3.5}
                                 width={10.4} height={7}
                                 clipPath="url(#flag-circle)"
@@ -581,17 +687,17 @@ function WorldMapInteractive() {
                 display: "flex", alignItems: "center", justifyContent: "center",
                 gap: "16px", padding: "6px 0 2px",
             }}>
-                <span style={{ fontSize: "0.58rem", color: "#bbb", letterSpacing: "0.04em" }}>
+                <span style={{ fontSize: "0.72rem", color: "#bbb", letterSpacing: "0.04em" }}>
                     {selectedId && COUNTRY_NAMES[selectedId]
                         ? `📍 ${COUNTRY_NAMES[selectedId]}`
                         : "Click a country to zoom · Drag to pan"}
                 </span>
                 {selectedId && (
                     <button onClick={handleReset} style={{
-                        fontSize: "0.58rem", color: "#e8431a", background: "none",
-                        border: "1px solid rgba(232,67,26,0.3)", borderRadius: "4px",
-                        padding: "2px 10px", cursor: "pointer", letterSpacing: "0.04em",
-                        fontWeight: 600,
+                        fontSize: "0.72rem", color: "#e8431a", background: "none",
+                        border: "1px solid rgba(232,67,26,0.3)", borderRadius: "6px",
+                        padding: "8px 16px", cursor: "pointer", letterSpacing: "0.04em",
+                        fontWeight: 600, minHeight: "36px",
                     }}>
                         ← Reset
                     </button>
