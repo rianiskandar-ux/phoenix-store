@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useReveal, revealStyle } from "@/hooks/useReveal";
 
@@ -60,7 +60,7 @@ function ChevronIcon({ open }) {
     );
 }
 
-export default function ResourcesPage() {
+function ResourcesContent() {
     const searchParams = useSearchParams();
     const [activeSlug, setActiveSlug] = useState("overview");
     const [openFaq, setOpenFaq] = useState(0);
@@ -379,5 +379,13 @@ export default function ResourcesPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function ResourcesPage() {
+    return (
+        <Suspense fallback={<div style={{ minHeight: "100vh", background: "#f8f9fb" }} />}>
+            <ResourcesContent />
+        </Suspense>
     );
 }
